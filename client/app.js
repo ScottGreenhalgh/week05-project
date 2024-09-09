@@ -1,5 +1,8 @@
 console.log("Test");
 
+const hostPrefix = import.meta.env.VITE_HOST_PREFIX;
+const hostLocation = import.meta.env.VITE_HOST_LOCATION;
+
 const commentContainer = document.getElementById("comment-container");
 
 async function getHandler(endpoint, container) {
@@ -32,4 +35,18 @@ document.getElementById("comments").addEventListener("submit", (event) => {
   handleFormSubmit(event, "comments", "comments");
 });
 
-getHandler("comments", commentContainer);
+commentContainer.addEventListener("click", async function (event) {
+  if (event.target.classList.contains("delete-button")) {
+    const id = event.target.id;
+    console.log("Delete clicked for id: " + id);
+    const response = await fetch(
+      hostPrefix + hostLocation + "/comments/" + id,
+      {
+        method: "DELETE",
+      }
+    );
+    const responseData = await response.json();
+    console.log(`Server (delete): `, responseData);
+    getHandler("comments", commentContainer);
+  }
+});
