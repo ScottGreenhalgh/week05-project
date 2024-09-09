@@ -38,7 +38,7 @@ app.post("/comments", async function (request, response) {
       dislikes = 0,
     } = request.body;
     const newComments = await db.query(
-      "INSERT INTO comments (username, message, likes) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+      "INSERT INTO comments (game, username, message, reviewscore, likes, dislikes) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
       [game, username, message, reviewscore, likes, dislikes]
     );
     response.status(200).json(newComments);
