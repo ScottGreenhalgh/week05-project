@@ -9,15 +9,15 @@ async function getHandler(endpoint, container) {
   const response = await fetch(hostPrefix + hostLocation + "/" + endpoint);
   const data = await response.json();
   console.log(data);
-  if (endpoint==="gamename"){
+  if (endpoint === "gamename") {
     container.innerHTML = "";
-    data.forEach(function(game) {
+    data.forEach(function (game) {
       const p = document.createElement("p");
       p.id = "title" + game.id;
       p.className = "title";
       p.textContent = game.game;
       container.appendChild(p);
-    }); 
+    });
   }
 }
 
@@ -61,3 +61,12 @@ commentContainer.addEventListener("click", async function (event) {
   }
 });
 
+//  -------- Websocket ----------
+
+const socket = new WebSocket(wsProtocol + hostLocation + "/guestbook");
+
+socket.addEventListener("message", function (event) {
+  const update = JSON.parse(event.data);
+  console.log("Comments updated", update.data);
+  getHandler("comments", commentContainer);
+});
