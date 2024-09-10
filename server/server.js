@@ -2,9 +2,11 @@ import express, { response } from "express";
 import cors from "cors";
 import pg from "pg";
 import dotenv from "dotenv";
-import * as api from './api.js';
+import expressWs from "express-ws";
+import * as api from "./api.js";
 
 const app = express();
+expressWs(app);
 app.use(cors());
 app.use(express.json());
 dotenv.config();
@@ -61,6 +63,69 @@ app.delete("/comments/:id", async function (request, response) {
   }
 });
 
+app.put("/comments/:id/like", async function (request, response) {
+  const id = request.params.id;
+  const { action } = request.body;
+
+  try {
+    const query =
+      action === "like"
+        ? "UPDATE guestbook SET likes = likes + 1 WHERE id = $1 RETURNING *"
+        : "UPDATE guestbook SET likes = likes - 1 WHERE id = $1 RETURNING *";
+
+    const updatedComments = await db.query(query, [id]);
+    const updatedEntry = updatedComments.rows[0];
+    response.status(200).json(updatedEntry);
+    sendUpdate({ type: "updateLikes", data: updatedEntry });
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: "Failed to update likes" });
+  }
+});
+
+app.put("/comments/:id/dislike", async function (request, response) {
+  const id = request.params.id;
+  const { action } = request.body;
+
+  try {
+    const query =
+      action === "dislike"
+        ? "UPDATE guestbook SET dislikes = dislikes + 1 WHERE id = $1 RETURNING *"
+        : "UPDATE guestbook SET dislikes = dislikes - 1 WHERE id = $1 RETURNING *";
+
+    const updatedComments = await db.query(query, [id]);
+    const updatedEntry = updatedComments.rows[0];
+    response.status(200).json(updatedEntry);
+    sendUpdate({ type: "updateDislikes", data: updatedEntry });
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: "Failed to update dislikes" });
+  }
+});
+
+// ---------- Websocket ------------
+
+let connectedClients = [];
+
+app.ws("/comments", function (websocket, request) {
+  console.log("New client connection");
+  connectedClients.push(websocket);
+
+  websocket.on("close", function () {
+    console.log("A Client disconnected");
+    connectedClients = connectedClients.filter(
+      (client) => client !== websocket
+    );
+  });
+});
+
+function sendUpdate(data) {
+  connectedClients.forEach((client) => {
+    if (client.readyState === client.OPEN) {
+      client.send(JSON.stringify(data));
+    }
+  });
+}
 
 // ---------- Start Server ------------
 
