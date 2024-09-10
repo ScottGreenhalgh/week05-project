@@ -23,3 +23,8 @@ body {
     background-position: 100% 0%; /* Moves to the right */
   }
 }
+
+/* Target smartphones (both portrait and landscape) */
+@media (max-width: 767px) {
+  /* Styles for mobile devices */
+}

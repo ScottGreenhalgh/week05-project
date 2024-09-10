@@ -63,6 +63,7 @@ app.delete("/comments/:id", async function (request, response) {
   }
 });
 
+
 app.put("/comments/:id/like", async function (request, response) {
   const id = request.params.id;
   const { action } = request.body;
@@ -126,6 +127,8 @@ function sendUpdate(data) {
     }
   });
 }
+
+console.log(api.getSteamTop10Games());
 
 // ---------- Start Server ------------
 
