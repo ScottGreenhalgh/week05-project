@@ -50,3 +50,9 @@ commentContainer.addEventListener("click", async function (event) {
     getHandler("comments", commentContainer);
   }
 });
+
+const games = ["counter strike 2", "black myth: wukong", "dota 2", "pugb: battlegrounds", "banana", "apex legends"];
+
+for(let i = 0; games.length > i; i++) {
+  console.log(games[i]);
+} 
