@@ -2,6 +2,7 @@ console.log("Test");
 
 const hostPrefix = import.meta.env.VITE_HOST_PREFIX;
 const hostLocation = import.meta.env.VITE_HOST_LOCATION;
+const wsProtocol = import.meta.env.VITE_WS_HOST;
 
 const commentContainer = document.getElementById("comment-element");
 
@@ -63,7 +64,7 @@ commentContainer.addEventListener("click", async function (event) {
 
 //  -------- Websocket ----------
 
-const socket = new WebSocket(wsProtocol + hostLocation + "/guestbook");
+const socket = new WebSocket(wsProtocol + hostLocation + "/comments");
 
 socket.addEventListener("message", function (event) {
   const update = JSON.parse(event.data);

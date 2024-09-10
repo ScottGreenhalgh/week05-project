@@ -63,7 +63,6 @@ app.delete("/comments/:id", async function (request, response) {
   }
 });
 
-
 app.put("/comments/:id/like", async function (request, response) {
   const id = request.params.id;
   const { action } = request.body;
@@ -71,8 +70,8 @@ app.put("/comments/:id/like", async function (request, response) {
   try {
     const query =
       action === "like"
-        ? "UPDATE guestbook SET likes = likes + 1 WHERE id = $1 RETURNING *"
-        : "UPDATE guestbook SET likes = likes - 1 WHERE id = $1 RETURNING *";
+        ? "UPDATE comments SET likes = likes + 1 WHERE id = $1 RETURNING *"
+        : "UPDATE comments SET likes = likes - 1 WHERE id = $1 RETURNING *";
 
     const updatedComments = await db.query(query, [id]);
     const updatedEntry = updatedComments.rows[0];
@@ -91,8 +90,8 @@ app.put("/comments/:id/dislike", async function (request, response) {
   try {
     const query =
       action === "dislike"
-        ? "UPDATE guestbook SET dislikes = dislikes + 1 WHERE id = $1 RETURNING *"
-        : "UPDATE guestbook SET dislikes = dislikes - 1 WHERE id = $1 RETURNING *";
+        ? "UPDATE comments SET dislikes = dislikes + 1 WHERE id = $1 RETURNING *"
+        : "UPDATE comments SET dislikes = dislikes - 1 WHERE id = $1 RETURNING *";
 
     const updatedComments = await db.query(query, [id]);
     const updatedEntry = updatedComments.rows[0];
