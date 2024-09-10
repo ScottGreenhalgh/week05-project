@@ -7,16 +7,44 @@ const db = new pg.Pool({
   connectionString: process.env.DB_URL,
 });
 
-const templateGame = [
+const templateGameGame = [
   "Counter Strike 2",
   "Black Myth: Wukong",
   "Dota 2",
   "PUBG: BATTLEGROUNDS",
   "Banana",
   "Apex Legends",
+  "Grand Theft Auto V",
+  "Warhammer 40m000: Space Marine 2",
+  "Deadlock",
+  "Rust",
 ];
 
-const templateUsername = ["Bill", "Jeff", "Steve", "Tim", "Jimmy", "Connor"];
+const templateGame = [
+  "Counter Strike 2",
+  "Black Myth: Wukong",
+  "Dota 2",
+  "PUBG: BATTLEGROUNDS",
+  "Counter Strike 2",
+  "Counter Strike 2",
+  "Grand Theft Auto V",
+  "Black Myth: Wukong",
+  "Dota 2",
+  "PUBG: BATTLEGROUNDS",
+];
+
+const templateUsername = [
+  "Bill",
+  "Jeff",
+  "Steve",
+  "Tim",
+  "Jimmy",
+  "Connor",
+  "Jack",
+  "James",
+  "Bob",
+  "Sam",
+];
 
 const templateMessage = [
   "Bill's Sample message",
@@ -25,9 +53,13 @@ const templateMessage = [
   "Tim's Sample message",
   "Jimmy's Sample message",
   "Connor's Sample message",
+  "Jack's Sample message",
+  "James's Sample message",
+  "Bob's Sample message",
+  "Sam's Sample message",
 ];
 
-const templateReview = [2, 4, 5, 5, 3, 1];
+const templateReview = [2, 4, 5, 5, 3, 1, 4, 1, 2, 5];
 
 const defaultLikes = 0;
 
@@ -47,7 +79,7 @@ async function resetDb() {
       ]
     );
     await db.query("INSERT INTO gamename (game) VALUES ($1)", [
-      templateGame[i],
+      templateGameGame[i],
     ]);
   }
 }
