@@ -33,7 +33,8 @@ const defaultLikes = 0;
 
 async function resetDb() {
   await db.query("TRUNCATE comments RESTART IDENTITY");
-  for (let i = 0; templateUsername.length > i; i++) {
+  await db.query("TRUNCATE gamename RESTART IDENTITY");
+  for (let i = 0; templateGame.length > i; i++) {
     await db.query(
       "INSERT INTO comments (game, username, message, reviewscore, likes, dislikes) VALUES ($1, $2, $3, $4, $5, $6)",
       [
@@ -45,13 +46,16 @@ async function resetDb() {
         defaultLikes,
       ]
     );
+    await db.query("INSERT INTO gamename (game) VALUES ($1)", [
+      templateGame[i],
+    ]);
   }
 }
 
 resetDb();
 console.log("resetting database");
 
-// Table created with the following:
+// Tables created with the following:
 
 // CREATE TABLE comments (
 //     id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
@@ -62,3 +66,8 @@ console.log("resetting database");
 //     likes INT,
 //     dislikes INT
 //   );
+
+// CREATE TABLE gamename (
+//   id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+//   game TEXT
+// );
