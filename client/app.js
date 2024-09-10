@@ -4,6 +4,8 @@ const hostPrefix = import.meta.env.VITE_HOST_PREFIX;
 const hostLocation = import.meta.env.VITE_HOST_LOCATION;
 const wsProtocol = import.meta.env.VITE_WS_HOST;
 
+let selectedGame = "";
+
 const commentContainer = document.getElementById("comments-element");
 
 async function getHandler(endpoint, container) {
@@ -17,39 +19,53 @@ async function getHandler(endpoint, container) {
       p.id = "title" + game.id;
       p.className = "title";
       p.textContent = game.game;
+
+      p.addEventListener("click", function () {
+        selectedGame = game.game;
+        console.log("Selected game:", selectedGame);
+        getHandler("comments", commentContainer);
+      });
+
       container.appendChild(p);
     });
   }
   if (endpoint === "comments") {
+    const response = await fetch(
+      `${hostPrefix + hostLocation}/${endpoint}?game=${selectedGame}`
+    );
+    const data = await response.json();
+    console.log(data);
     container.innerHTML = "";
     data.forEach(function (dbData) {
-      const p = document.createElement("p");
-      const delButton = document.createElement("button");
-      const likeButton = document.createElement("button");
-      const dislikeButton = document.createElement("button");
+      if (dbData.game === selectedGame) {
+        const p = document.createElement("p");
+        const delButton = document.createElement("button");
+        const likeButton = document.createElement("button");
+        const dislikeButton = document.createElement("button");
 
-      p.textContent = `"${dbData.message}" - ${dbData.username}`;
-      p.className = "comments-text";
+        p.textContent = `"${dbData.message}" - ${dbData.username}`;
+        p.className = "comments-text";
 
-      delButton.textContent = "Delete";
-      delButton.className = "delete-button";
-      delButton.setAttribute("aria-label", "Delete button");
-      delButton.id = dbData.id;
+        delButton.textContent = "Delete";
+        delButton.className = "delete-button";
+        delButton.setAttribute("aria-label", "Delete button");
+        delButton.id = dbData.id;
 
-      likeButton.textContent = "👍 " + dbData.likes;
-      likeButton.className = "like-button";
-      likeButton.setAttribute("aria-label", "Like button");
-      likeButton.id = "like" + dbData.id;
+        likeButton.textContent = "👍 " + dbData.likes;
+        likeButton.className = "like-button";
+        likeButton.setAttribute("aria-label", "Like button");
+        likeButton.id = "like" + dbData.id;
 
-      dislikeButton.textContent = "👎 " + dbData.dislikes;
-      dislikeButton.className = "dislike-button";
-      dislikeButton.setAttribute("aria-label", "Disike button");
-      dislikeButton.id = "dislike" + dbData.id;
+        dislikeButton.textContent = "👎 " + dbData.dislikes;
+        dislikeButton.className = "dislike-button";
+        dislikeButton.setAttribute("aria-label", "Disike button");
+        dislikeButton.id = "dislike" + dbData.id;
 
-      container.appendChild(p);
-      container.appendChild(delButton);
-      container.appendChild(likeButton);
-      container.appendChild(dislikeButton);
+        container.appendChild(p);
+        container.appendChild(delButton);
+        container.appendChild(likeButton);
+        container.appendChild(dislikeButton);
+      }
     });
   }
 }

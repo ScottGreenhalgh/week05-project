@@ -21,6 +21,17 @@ app.get("/", function (request, response) {
 });
 
 app.get("/comments", async function (request, response) {
+  const { game } = request.query;
+  let query = "SELECT * FROM comments";
+  let params = [];
+
+  if (game) {
+    query += " WHERE game = $1 ORDER BY id ASC";
+    params = [game];
+  } else {
+    query += " ORDER BY id ASC";
+  }
+
   try {
     const comments = await db.query("SELECT * FROM comments ORDER BY id ASC");
     response.status(200).json(comments.rows);
