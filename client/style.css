@@ -1,4 +1,25 @@
 body {
-  background-color: rgb(6, 138, 94);
-  color: aliceblue;
+  background: linear-gradient(
+    153deg,
+    /* Sets the gradient angle */ rgba(29, 29, 29, 0.996),
+    /* Dark Charcoal */ rgba(44, 62, 80, 0.904),
+    /* Gunmetal Blue */ rgba(58, 43, 93, 0.927),
+    /* Deep Purple */ rgba(18, 18, 18, 0.992),
+    /* Jet Black */ rgba(29, 29, 29, 0.996)
+      /* Repeat dark charcoal for smooth looping */
+  );
+  background-size: 130% 130%; /* Scales the background for smoother transitions */
+  background-position: center; /* Centers the background */
+  background-repeat: no-repeat; /* Prevents repeating the background */
+  background-attachment: fixed; /* Keeps the background fixed during scroll */
+  animation: smoothHorizontalShift 23s linear infinite alternate; /* Moves background back and forth */
+}
+
+@keyframes smoothHorizontalShift {
+  0% {
+    background-position: 0% 0%; /* Starts at top-left */
+  }
+  100% {
+    background-position: 100% 0%; /* Moves to the right */
+  }
 }
