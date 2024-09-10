@@ -3,7 +3,7 @@ console.log("Test");
 const hostPrefix = import.meta.env.VITE_HOST_PREFIX;
 const hostLocation = import.meta.env.VITE_HOST_LOCATION;
 
-const commentContainer = document.getElementById("comment-container");
+const commentContainer = document.getElementById("comment-element");
 
 async function getHandler(endpoint, container) {
   const response = await fetch(hostPrefix + hostLocation + "/" + endpoint);
