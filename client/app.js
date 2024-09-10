@@ -9,6 +9,16 @@ async function getHandler(endpoint, container) {
   const response = await fetch(hostPrefix + hostLocation + "/" + endpoint);
   const data = await response.json();
   console.log(data);
+  if (endpoint==="gamename"){
+    container.innerHTML = "";
+    data.forEach(function(game) {
+      const p = document.createElement("p");
+      p.id = "title" + game.id;
+      p.className = "title";
+      p.textContent = game.game;
+      container.appendChild(p);
+    }); 
+  }
 }
 
 async function handleFormSubmit(event, formId, endpoint) {
@@ -51,8 +61,3 @@ commentContainer.addEventListener("click", async function (event) {
   }
 });
 
-const games = ["counter strike 2", "black myth: wukong", "dota 2", "pugb: battlegrounds", "banana", "apex legends"];
-
-for(let i = 0; games.length > i; i++) {
-  console.log(games[i]);
-} 
