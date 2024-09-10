@@ -14,7 +14,7 @@ const db = new pg.Pool({
   connectionString: process.env.DB_URL,
 });
 
-// --------- Endpoints ----------
+// --------- Comments Endpoints ----------
 
 app.get("/", function (request, response) {
   response.json("root route");
@@ -100,6 +100,18 @@ app.put("/comments/:id/dislike", async function (request, response) {
   } catch (error) {
     console.error(error);
     response.status(500).json({ error: "Failed to update dislikes" });
+  }
+});
+
+// ---------- Gamename Endpoints ----------
+
+app.get("/gamename", async function (request, response) {
+  try {
+    const comments = await db.query("SELECT * FROM gamename ORDER BY id ASC");
+    response.status(200).json(comments.rows);
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: "Failed to retrieve database" });
   }
 });
 
