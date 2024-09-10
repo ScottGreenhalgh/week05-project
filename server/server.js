@@ -61,6 +61,7 @@ app.delete("/comments/:id", async function (request, response) {
   }
 });
 
+console.log(api.getSteamTop10Games());
 
 // ---------- Start Server ------------
 
