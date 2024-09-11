@@ -31,7 +31,7 @@ async function getHandler(endpoint, container) {
       img.class = "titleImage";
 
       p.addEventListener("click", function () {
-        selectedGame = game.game;
+        selectedGame = game.name;
         console.log("Selected game:", selectedGame);
 
         if (selectedGame !== "") {
