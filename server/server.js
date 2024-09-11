@@ -154,6 +154,19 @@ app.post("/twitchstream", async function (request, response) {
   }
 });
 
+app.post("/twitchclips", async function (request, response) {
+  const { twitch_id } = request.body;
+
+  try {
+    const streams = await api.getGameClips(twitch_id);
+    response.status(200).json(streams);
+    console.log(streams);
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: "Failed to retrieve clips" });
+  }
+});
+
 // ---------- Websocket ------------
 
 let connectedClients = [];
