@@ -1,20 +1,21 @@
+/* Main background settings with smooth gradient and animated horizontal shift */
 body {
   background: linear-gradient(
     153deg,
-    /* Sets the gradient angle */ rgba(29, 29, 29, 0.996),
-    /* Dark Charcoal */ rgba(44, 62, 80, 0.904),
-    /* Gunmetal Blue */ rgba(58, 43, 93, 0.927),
-    /* Deep Purple */ rgba(18, 18, 18, 0.992),
-    /* Jet Black */ rgba(29, 29, 29, 0.996)
-      /* Repeat dark charcoal for smooth looping */
+    /* Dark Charcoal */ rgba(29, 29, 29, 0.996),
+    /* Gunmetal Blue */ rgba(44, 62, 80, 0.904),
+    /* Deep Purple */ rgba(58, 43, 93, 0.927),
+    /* Jet Black */ rgba(18, 18, 18, 0.992),
+    /* Dark Charcoal  */ rgba(29, 29, 29, 0.996) /* Repeat dark charcoal */
   );
-  background-size: 130% 130%; /* Scales the background for smoother transitions */
+  background-size: 130% 130%; /* Enlarges background for smooth movement */
   background-position: center; /* Centers the background */
-  background-repeat: no-repeat; /* Prevents repeating the background */
-  background-attachment: fixed; /* Keeps the background fixed during scroll */
-  animation: smoothHorizontalShift 14s linear infinite alternate; /* Moves background back and forth */
+  background-repeat: no-repeat; /* No background repeat */
+  background-attachment: fixed; /* Background stays fixed when scrolling */
+  animation: smoothHorizontalShift 14s linear infinite alternate; /* Background moves horizontally */
 }
 
+/* Defines the horizontal movement of the background */
 @keyframes smoothHorizontalShift {
   0% {
     background-position: 0% 0%; /* Starts at top-left */
@@ -24,28 +25,25 @@ body {
   }
 }
 
-/* Target smartphones (both portrait and landscape) */
-@media (max-width: 767px) {
-  /* Styles for mobile devices */
-}
-
-/* Logo-specific styling */
+/* Logo container styling: centers logo */
 #logo {
   display: flex;
-  justify-content: center; /* Aligns the logo to the right */
-  align-items: center; /* Centers the logo vertically */
-  width: 100%; /* Make the logo container full-width */
-  margin: 0 auto; /* Ensures the container remains centered */
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto;
 }
 
+/* Logo image styling: adjusts width and maintains aspect ratio */
 .logo {
-  width: 14%; /* Stretch the logo across the full width */
-  max-width: 100%; /* Ensures the logo does not exceed the container */
-  height: auto; /* Maintain aspect ratio */
+  width: 14%;
+  max-width: 100%;
+  height: auto;
 }
 
+/* Responsive styling for mobile screens */
 @media (max-width: 767px) {
   .logo {
-    max-width: 150px; /* Reduces the logo size for smaller screens */
+    max-width: 150px; /* Reduces logo size on smaller screens */
   }
 }
