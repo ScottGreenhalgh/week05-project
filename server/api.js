@@ -351,13 +351,6 @@ export const getGameStreams = async (twitchGameID, playerHeight, playerWidth) =>
     for (const stream of streams) {
         stream.embed_source = `https://player.twitch.tv/?channel=${stream.user_name}?parent=${clientDomain}`;
         stream.url = `https://www.twitch.tv/${stream.user_name}`;
-        if (typeof document !== 'undefined') {
-            const iframe = document.createElement('iframe');
-            iframe.setAttribute("src", `${stream.embed_source}`);
-            iframe.setAttribute("height", `${playerHeight}`);
-            iframe.setAttribute("width", `${playerWidth}`);
-            stream.embed_iframe = iframe;
-        }
     }
     return streams;
 }
@@ -367,6 +360,11 @@ export const getGameClips = async (twitchGameID) => {
     /// returns: array of objects containing clip metadata for the 10 most-viewed clips in the games category over the past 7 days.
     // we are mostly concerned with the embed_url key, which can be used to create a twitch player embed as detailed here: https://dev.twitch.tv/docs/embed/video-and-clips/ we will need to append our own &parent tag for our domain though (and also allow that domain in twitch api! - atm i have only allowed http://localhost:5500)
     const clips = await getTwitchGameClips(twitchGameID,10,7);
+    console.log(clips);
+    for (const clip of clips) {
+        console.log(clip);
+        clip.embed_source = clip.embed_url + `&parent=${clientDomain}`;
+    }
     return clips;
 }
 
@@ -377,9 +375,9 @@ export const getGameStats = () => {
 
 /* -------- RUN -------- */
 
-export async function run() {
-    await setTwitchAuthToken();
-    // console.log(await getGames());
-    console.log(await getGameStreams(1441208453));
-}
-run();
+// export async function run() {
+//     await setTwitchAuthToken();
+//     console.log(await getGames());
+//     console.log(await getGameClips(1441208453));
+// }
+// run();
