@@ -1,5 +1,7 @@
 import pg from "pg";
 import dotenv from "dotenv";
+import * as api from "./api.js";
+import { setTwitchAuthToken } from "./api.js";
 
 dotenv.config();
 
@@ -86,6 +88,43 @@ async function resetDb() {
 
 resetDb();
 console.log("resetting database");
+
+// -------- API Integration ---------
+
+async function gamesFromAPi() {
+  await setTwitchAuthToken();
+
+  const apigames = await api.getGames();
+  console.log(apigames);
+  await db.query("TRUNCATE games RESTART IDENTITY");
+  apigames.forEach(async function (games) {
+    await db.query(
+      "INSERT INTO games (rank, concurrent_in_game, peak_in_game, steam_id, name, description, thumbnail_image, background_image, bg_image_raw, header_image, genre, developers, publishers, igdb_id, igdb_name, twitch_id, twitch_name, twitch_boxart) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)",
+      [
+        games.rank,
+        games.concurrent_in_game,
+        games.peak_in_game,
+        games.steam_id,
+        games.name,
+        games.description,
+        games.thumbnail_image,
+        games.background_image,
+        games.bg_image_raw,
+        games.header_image,
+        games.genre,
+        games.developers[0],
+        games.publishers[0],
+        games.igdb_id,
+        games.igdb_name,
+        games.twitch_id,
+        games.twitch_name,
+        games.twitch_boxart,
+      ]
+    );
+  });
+}
+
+await gamesFromAPi();
 
 // Tables created with the following:
 
