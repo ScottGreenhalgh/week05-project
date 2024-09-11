@@ -9,7 +9,7 @@ let twitchAuthToken;
 const twitchClientID = process.env.TWITCH_CLIENT_KEY;
 const twitchClientSecret = process.env.TWITCH_CLIENT_SECRET;
 
-const setTwitchAuthToken = async () => {
+export const setTwitchAuthToken = async () => {
     try {
         const response = await fetch(
             "https://id.twitch.tv/oauth2/token", {
@@ -30,7 +30,7 @@ const setTwitchAuthToken = async () => {
     }
 };
 
-const validateTwitchAuthToken = async () => {
+export const validateTwitchAuthToken = async () => {
     if (twitchAuthToken.length < 1) {
         console.error("can't find your twitch auth token! is it set in your .env?")
         return;
@@ -229,6 +229,10 @@ export const getSteamTopGames = async(amount) => {
     /// (rank, appid, concurrent_in_game, peak_in_game)
     try {
         let top100 = await getSteamTop100ByCurrentPlayers();
+
+        // temporary exception for Wallpaper Engine (it is listed as a game instead of software in the steam api but doesn't have an entry on igdb or twitch)
+        top100 = top100.filter(obj => obj.appid !== 431960);
+
         let topX = top100.slice(0,amount);
         return topX;
     }
@@ -346,6 +350,7 @@ export const getGames = async () => {
     // SOME KEYS OF NOTE: names on each platform, description, images, genres, ratings, trailers, and websites. 
 
     const games = await getSteamTopGames(10); // get top 10 games
+
     for (const game of games) {
 
         game.steam_id = game.appid;
@@ -381,8 +386,9 @@ export const getGames = async () => {
         // add data from twitch here:
         game.twitch_id = twitchInfo.id;
         game.twitch_name = twitchInfo.name;
-        game.twitch_boxart = twitch.box_art_url;
-
+        game.twitch_boxart = twitchInfo.box_art_url;
+    
+        
     };
 
     return games;
@@ -415,12 +421,9 @@ export const getGameStats = () => {
 }
 
 /* -------- RUN -------- */
-// async function run() {
+
+// export async function run() {
 //     await setTwitchAuthToken();
-
-
-//     // getGames();
-//     // getGameStreams(512923);
-//     // getGameClips(512923);
+//     console.log(await getGames());
 // }
 // run();
