@@ -4,6 +4,7 @@ import pg from "pg";
 import dotenv from "dotenv";
 import expressWs from "express-ws";
 import * as api from "./api.js";
+import { setTwitchAuthToken } from "./api.js";
 
 const app = express();
 expressWs(app);
@@ -119,15 +120,26 @@ app.put("/comments/:id/dislike", async function (request, response) {
 
 // ---------- Gamename Endpoints ----------
 
-app.get("/gamename", async function (request, response) {
+app.get("/games", async function (request, response) {
   try {
-    const comments = await db.query("SELECT * FROM gamename ORDER BY id ASC");
+    const comments = await db.query("SELECT * FROM games ORDER BY rank ASC");
     response.status(200).json(comments.rows);
   } catch (error) {
     console.error(error);
     response.status(500).json({ error: "Failed to retrieve database" });
   }
 });
+
+// -------- API Integration / Endpoints ---------
+
+async function gamesFromAPi() {
+  await setTwitchAuthToken();
+
+  const apigames = await api.getGames();
+  console.log(apigames);
+}
+
+gamesFromAPi();
 
 // ---------- Websocket ------------
 
@@ -152,8 +164,6 @@ function sendUpdate(data) {
     }
   });
 }
-
-console.log(api.getSteamTop10Games());
 
 // ---------- Start Server ------------
 

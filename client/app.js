@@ -8,18 +8,27 @@ let selectedGame = "";
 
 const commentContainer = document.getElementById("comments-element");
 
+// ----------- Game Headings / Comments -----------
+
 async function getHandler(endpoint, container) {
   const response = await fetch(hostPrefix + hostLocation + "/" + endpoint);
   const data = await response.json();
   console.log(endpoint, data);
-  if (endpoint === "gamename") {
+  if (endpoint === "games") {
     container.innerHTML = "";
     data.forEach(function (game) {
       //clickable game titles
       const p = document.createElement("p");
-      p.id = "title" + game.id;
+      const img = document.createElement("img");
+
+      p.id = "title" + game.rank;
       p.className = "title";
-      p.textContent = game.game;
+      p.textContent = game.name;
+
+      img.src = game.thumbnail_image;
+      img.alt = "image of" + game.name;
+      img.id = "titleImage" + game.rank;
+      img.class = "titleImage";
 
       p.addEventListener("click", function () {
         selectedGame = game.game;
@@ -33,6 +42,7 @@ async function getHandler(endpoint, container) {
       });
 
       container.appendChild(p);
+      container.appendChild(img);
     });
   }
   if (endpoint === "comments") {
@@ -75,6 +85,8 @@ async function getHandler(endpoint, container) {
     });
   }
 }
+
+// --------- Form Submission / Button Functions -----------
 
 async function handleFormSubmit(event, formId, endpoint) {
   event.preventDefault();
@@ -182,6 +194,8 @@ commentContainer.addEventListener("click", async function (event) {
   }
 });
 
+// --------- API Database ---------
+
 //  -------- Websocket ----------
 
 const socket = new WebSocket(wsProtocol + hostLocation + "/comments");
@@ -210,5 +224,5 @@ socket.addEventListener("message", function (event) {
 });
 
 // -------- Calling Initial Functions --------
-getHandler("gamename", document.getElementById("games"));
+getHandler("games", document.getElementById("games"));
 getHandler("comments", commentContainer);
