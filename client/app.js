@@ -37,18 +37,26 @@ async function getHandler(endpoint, container) {
           statsContainer.innerHTML = "";
 
           const titleStats = document.createElement("p");
+          const currentPlayers = document.createElement("p");
+          const peakPlayers = document.createElement("p");
           const descriptionStats = document.createElement("p");
           const developersStats = document.createElement("p");
           const publishersStats = document.createElement("p");
           const genreStats = document.createElement("p");
 
           titleStats.innerHTML = game.name;
+          currentPlayers.innerHTML =
+            "Currently playing: " + numberWithCommas(game.concurrent_in_game);
+          peakPlayers.innerHTML =
+            "Peak today: " + numberWithCommas(game.peak_in_game);
           descriptionStats.innerHTML = "Description: " + game.description;
           developersStats.innerHTML = "Developer: " + game.developers;
           publishersStats.innerHTML = "Publisher: " + game.publishers;
           genreStats.innerHTML = "Genre: " + game.genre;
 
           statsContainer.appendChild(titleStats);
+          statsContainer.appendChild(currentPlayers);
+          statsContainer.appendChild(peakPlayers);
           statsContainer.appendChild(descriptionStats);
           statsContainer.appendChild(developersStats);
           statsContainer.appendChild(publishersStats);
@@ -209,6 +217,13 @@ commentContainer.addEventListener("click", async function (event) {
     getHandler("comments", commentContainer);
   }
 });
+
+// --------- Utils ----------
+
+const formatter = new Intl.NumberFormat();
+function numberWithCommas(number) {
+  return formatter.format(number);
+}
 
 //  -------- Websocket ----------
 
