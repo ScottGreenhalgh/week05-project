@@ -343,13 +343,13 @@ export const getGames = async () => {
 
 }
 
-export const getGameStreams = async (twitchGameID, playerHeight, playerWidth) => {
+export const getGameStreams = async (twitchGameID) => {
     /// usage: await getGameStreams(*twitch_id from getSteamTopGames*)
     /// returns: array of objects containing stream metadata for the 10 highest viewer english language streams currently live in the games category.
     // we are mostly concerned with the embed_source key here which can be used to create a twitch player embed as detailed here: https://dev.twitch.tv/docs/embed/video-and-clips/ we will need to append our own &parent tag for our domain though (and also allow that domain in twitch api! - atm i have only allowed http://localhost:5500)
     const streams = await getTwitchGameStreams(twitchGameID,10);
     for (const stream of streams) {
-        stream.embed_source = `https://player.twitch.tv/?channel=${stream.user_name}?parent=${clientDomain}`;
+        stream.embed_source = `https://player.twitch.tv/?channel=${stream.user_name}&parent=${clientDomain}`;
         stream.url = `https://www.twitch.tv/${stream.user_name}`;
     }
     return streams;
@@ -378,6 +378,6 @@ export const getGameStats = () => {
 // export async function run() {
 //     await setTwitchAuthToken();
 //     console.log(await getGames());
-//     console.log(await getGameClips(1441208453));
+//     console.log(await getGameStreams(1441208453));
 // }
 // run();
