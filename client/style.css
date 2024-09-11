@@ -31,7 +31,7 @@ body {
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin: 0 auto;
+  margin: 30px;
 }
 
 /* Logo image styling: adjusts width and maintains aspect ratio */
@@ -46,4 +46,32 @@ body {
   .logo {
     max-width: 150px; /* Reduces logo size on smaller screens */
   }
+}
+
+/* Header styling for the games container */
+#games {
+display: flex;
+overflow-x: auto;
+white-space: nowrap;
+scroll-behavior: smooth;
+scrollbar-width: thin;
+scrollbar-track-color: transparent;
+}
+
+#games::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#games::-webkit-scrollbar {
+  border-radius: 2px;
+  height: 4px;
+
+}
+
+#games::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+#games:hover {
+cursor: pointer;
 }
