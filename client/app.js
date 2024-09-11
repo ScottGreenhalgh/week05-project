@@ -25,7 +25,7 @@ async function getHandler(endpoint, container) {
       img.id = "titleImage" + game.rank;
       img.class = "titleImage";
 
-      img.addEventListener("click", function () {
+      img.addEventListener("click", async function () {
         selectedGame = game.name;
         console.log("Selected game:", selectedGame);
 
@@ -61,6 +61,30 @@ async function getHandler(endpoint, container) {
           statsContainer.appendChild(developersStats);
           statsContainer.appendChild(publishersStats);
           statsContainer.appendChild(genreStats);
+
+          const data = { twitch_id: game.twitch_id };
+          console.log(data);
+          const response = await fetch(
+            hostPrefix + hostLocation + "/twitchstream",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(data),
+            }
+          );
+          console.log(response);
+          const responseData = await response.json();
+          console.log(`From the server (twitchstream): `, responseData);
+
+          const twitchContainer = document.getElementById("twitch-element");
+          const iframe = document.createElement("iframe");
+
+          iframe.src = responseData[0].embed_source;
+          iframe.setAttribute("allowfullscreen", true);
+
+          twitchContainer.appendChild(iframe);
         }
 
         getHandler("comments", commentContainer);
