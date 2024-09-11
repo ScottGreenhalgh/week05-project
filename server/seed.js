@@ -10,12 +10,12 @@ const db = new pg.Pool({
 });
 
 const templateGameGame = [
-  "Counter Strike 2",
+  "Counter-Strike 2",
   "Black Myth: Wukong",
   "Dota 2",
   "PUBG: BATTLEGROUNDS",
   "Banana",
-  "Apex Legends",
+  "Apex Legends™",
   "Grand Theft Auto V",
   "Warhammer 40m000: Space Marine 2",
   "Deadlock",
@@ -23,13 +23,13 @@ const templateGameGame = [
 ];
 
 const templateGame = [
-  "Counter Strike 2",
+  "Counter-Strike 2",
   "Black Myth: Wukong",
   "Dota 2",
   "PUBG: BATTLEGROUNDS",
-  "Counter Strike 2",
-  "Counter Strike 2",
-  "Grand Theft Auto V",
+  "Counter-Strike 2",
+  "Counter-Strike 2",
+  "Black Myth: Wukong",
   "Black Myth: Wukong",
   "Dota 2",
   "PUBG: BATTLEGROUNDS",
@@ -124,7 +124,7 @@ async function gamesFromAPi() {
   });
 }
 
-await gamesFromAPi();
+//await gamesFromAPi();
 
 // Tables created with the following:
 
@@ -141,4 +141,26 @@ await gamesFromAPi();
 // CREATE TABLE gamename (
 //   id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
 //   game TEXT
+// );
+
+// CREATE TABLE games (
+//   id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+//   rank INT,
+//   concurrent_in_game INT,
+//   peak_in_game INT,
+//   steam_id INT,
+//   name TEXT,
+//   description TEXT,
+//   thumbnail_image TEXT,
+//   background_image TEXT,
+//   bg_image_raw TEXT,
+//   header_image TEXT,
+//   genre TEXT,
+//   developers TEXT,
+//   publishers TEXT,
+//   igdb_id INT,
+//   igdb_name TEXT,
+//   twitch_id TEXT,
+//   twitch_name TEXT,
+//   twitch_boxart TEXT
 // );
