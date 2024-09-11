@@ -135,11 +135,24 @@ app.get("/games", async function (request, response) {
 async function gamesFromAPi() {
   await setTwitchAuthToken();
 
-  const apigames = await api.getGames();
-  console.log(apigames);
+  // const apigames = await api.getGames();
+  // console.log(apigames);
 }
 
 gamesFromAPi();
+
+app.post("/twitchstream", async function (request, response) {
+  const { twitch_id } = request.body;
+
+  try {
+    const streams = await api.getGameStreams(twitch_id);
+    response.status(200).json(streams);
+    console.log(streams);
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: "Failed to retrieve streams" });
+  }
+});
 
 // ---------- Websocket ------------
 
