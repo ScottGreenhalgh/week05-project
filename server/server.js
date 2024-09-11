@@ -55,7 +55,9 @@ app.post("/comments", async function (request, response) {
       "INSERT INTO comments (game, username, message, reviewscore, likes, dislikes) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
       [game, username, message, reviewscore, likes, dislikes]
     );
-    response.status(200).json(newComments);
+    const newEntry = newComments.rows[0];
+    response.status(200).json(newEntry);
+    sendUpdate({ type: "newPost", data: newEntry });
   } catch (error) {
     console.error(error);
     response.status(500).json({ error: "Failed to add entry" });
@@ -68,6 +70,7 @@ app.delete("/comments/:id", async function (request, response) {
   try {
     await db.query("DELETE FROM comments WHERE id = $1", [id]);
     response.status(200).json({ success: true });
+    sendUpdate({ type: "deletePost", data: { id } });
   } catch (error) {
     console.error(error);
     response.status(500).json({ error: "Failed to delete entry" });

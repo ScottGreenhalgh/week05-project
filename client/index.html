@@ -9,11 +9,12 @@
   </head>
   <body>
     <!-- Header -->
-    <div id="logo">
-  <img src="assets/logo.webp" alt="GameScout Logo" class="logo" />
-</div>
-       <h1 class="title-text">Title Text</h1>
-      <div id="games">
+    <header>
+      <div id="logo">
+        <img src="assets/logo.webp" alt="GameScout Logo" class="logo" />
+      </div>
+      <h1 class="title-text">Title Text</h1>
+      <div id="games"></div>
     </header>
     <!-- End Header -->
     <!-- Main -->
@@ -23,23 +24,26 @@
       <div id="stats-element"></div>
       <div id="comments-element"></div>
       <div id="comments-form-element">
-        <form id="comments">
+        <form id="comments" style="display: none">
           <input
+            type="text"
             id="username-box"
             class="input-box"
             for="text-input"
             name="username"
             placeholder="Username"
+            required
             aria-label="your display name"
           />
-          <input
+          <textarea
             id="message-box"
             class="input-box"
             for="text-input"
             name="message"
             placeholder="Comment"
+            required
             aria-label="your message text"
-          />
+          ></textarea>
           <input
             type="range"
             min="1"
@@ -51,6 +55,7 @@
             aria-label="select review score, one to five"
           />
           <button
+            type="submit"
             class="submit-button"
             name="commentdata"
             aria-label="submit comment"
