@@ -101,7 +101,7 @@ async function getHandler(endpoint, container) {
           );
 
           const clipsResponseData = await clipsResponse.json();
-          console.log(`From the server (twitchclips): `, streamResponseData);
+          console.log(`From the server (twitchclips): `, clipsResponseData);
 
           const clipsContainer = document.getElementById("clips-element");
 
