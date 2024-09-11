@@ -12,7 +12,7 @@ body {
   background-position: center; /* Centers the background */
   background-repeat: no-repeat; /* Prevents repeating the background */
   background-attachment: fixed; /* Keeps the background fixed during scroll */
-  animation: smoothHorizontalShift 23s linear infinite alternate; /* Moves background back and forth */
+  animation: smoothHorizontalShift 14s linear infinite alternate; /* Moves background back and forth */
 }
 
 @keyframes smoothHorizontalShift {
@@ -27,4 +27,25 @@ body {
 /* Target smartphones (both portrait and landscape) */
 @media (max-width: 767px) {
   /* Styles for mobile devices */
+}
+
+/* Logo-specific styling */
+#logo {
+  display: flex;
+  justify-content: center; /* Aligns the logo to the right */
+  align-items: center; /* Centers the logo vertically */
+  width: 100%; /* Make the logo container full-width */
+  margin: 0 auto; /* Ensures the container remains centered */
+}
+
+.logo {
+  width: 14%; /* Stretch the logo across the full width */
+  max-width: 100%; /* Ensures the logo does not exceed the container */
+  height: auto; /* Maintain aspect ratio */
+}
+
+@media (max-width: 767px) {
+  .logo {
+    max-width: 150px; /* Reduces the logo size for smaller screens */
+  }
 }
