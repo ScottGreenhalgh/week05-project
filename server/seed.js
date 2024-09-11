@@ -124,7 +124,7 @@ async function gamesFromAPi() {
   });
 }
 
-//await gamesFromAPi();
+await gamesFromAPi();
 
 // Tables created with the following:
 

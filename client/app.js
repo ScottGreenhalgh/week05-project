@@ -7,7 +7,6 @@ const wsProtocol = import.meta.env.VITE_WS_HOST;
 let selectedGame = "";
 
 const commentContainer = document.getElementById("comments-element");
-const statsContainer = document.getElementById("stats-element");
 
 // ----------- Game Headings / Comments -----------
 
@@ -32,6 +31,28 @@ async function getHandler(endpoint, container) {
 
         if (selectedGame !== "") {
           document.getElementById("comments").style.display = "block";
+        }
+        if (selectedGame === game.name) {
+          const statsContainer = document.getElementById("stats-element");
+          statsContainer.innerHTML = "";
+
+          const titleStats = document.createElement("p");
+          const descriptionStats = document.createElement("p");
+          const developersStats = document.createElement("p");
+          const publishersStats = document.createElement("p");
+          const genreStats = document.createElement("p");
+
+          titleStats.innerHTML = game.name;
+          descriptionStats.innerHTML = "Description: " + game.description;
+          developersStats.innerHTML = "Developer: " + game.developers;
+          publishersStats.innerHTML = "Publisher: " + game.publishers;
+          genreStats.innerHTML = "Genre: " + game.genre;
+
+          statsContainer.appendChild(titleStats);
+          statsContainer.appendChild(descriptionStats);
+          statsContainer.appendChild(developersStats);
+          statsContainer.appendChild(publishersStats);
+          statsContainer.appendChild(genreStats);
         }
 
         getHandler("comments", commentContainer);
