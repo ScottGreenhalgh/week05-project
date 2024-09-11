@@ -11,7 +11,7 @@ const commentContainer = document.getElementById("comments-element");
 async function getHandler(endpoint, container) {
   const response = await fetch(hostPrefix + hostLocation + "/" + endpoint);
   const data = await response.json();
-  console.log(data);
+  console.log(endpoint, data);
   if (endpoint === "gamename") {
     container.innerHTML = "";
     data.forEach(function (game) {
@@ -24,6 +24,11 @@ async function getHandler(endpoint, container) {
       p.addEventListener("click", function () {
         selectedGame = game.game;
         console.log("Selected game:", selectedGame);
+
+        if (selectedGame !== "") {
+          document.getElementById("comments").style.display = "block";
+        }
+
         getHandler("comments", commentContainer);
       });
 
@@ -35,7 +40,6 @@ async function getHandler(endpoint, container) {
       `${hostPrefix + hostLocation}/${endpoint}?game=${selectedGame}`
     );
     const data = await response.json();
-    console.log(data);
     container.innerHTML = "";
     //comments
     data.forEach(function (dbData) {
@@ -78,6 +82,7 @@ async function handleFormSubmit(event, formId, endpoint) {
   const form = document.getElementById(formId);
   const formData = new FormData(form);
   const data = Object.fromEntries(formData);
+  data.game = selectedGame;
   console.log(data);
   const response = await fetch(hostPrefix + hostLocation + "/" + endpoint, {
     method: "POST",
@@ -183,8 +188,25 @@ const socket = new WebSocket(wsProtocol + hostLocation + "/comments");
 
 socket.addEventListener("message", function (event) {
   const update = JSON.parse(event.data);
-  console.log("Comments updated", update.data);
-  getHandler("comments", commentContainer);
+  switch (update.type) {
+    case "newPost":
+      console.log("New post added: ", update.data);
+      getHandler("comments", commentContainer);
+      break;
+    case "updateLikes":
+      console.log("Likes updated: ", update.data);
+      getHandler("comments", commentContainer);
+      break;
+    case "updatedDislikes":
+      console.log("Dislikes updated: ", update.data);
+      getHandler("comments", commentContainer);
+    case "deletePost":
+      console.log("Post deleted: ", update.data.id);
+      getHandler("comments", commentContainer);
+      break;
+    default:
+      console.error("Unknown update recieved: ", update.type);
+  }
 });
 
 // -------- Calling Initial Functions --------
