@@ -2,6 +2,9 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+const clientURL = process.env.VITE_CLIENT_PREFIX + process.env.VITE_CLIENT_LOCATION;
+const clientDomain = process.env.VITE_CLIENT_LOCATION;
+
 /* -------- TWITCH -------- */
 // https://dev.twitch.tv/docs/api/reference/
 
@@ -261,61 +264,6 @@ export const getSteamGamePlayerCount = async(gameID) => {
     }
 }
 
-export const getSteamTop10Games = () => {
-    return [
-        {
-            name: "Counter-Strike 2",
-            appid: 730,
-            playercount: 1323574
-        },
-        {
-            name: "Black Myth: Wukong",
-            appid: 2358720,
-            playercount: 841306
-        },
-        {
-            name: "PUBG: BATTLEGROUNDS",
-            appid: 578080,
-            playercount: 650353
-        },
-        {
-            name: "Dota 2",
-            appid: 570,
-            playercount: 598739
-        },
-        {
-            name: "Banana",
-            appid: 2923300,
-            playercount: 369937
-        },
-        {
-            name: "NARAKA: BLADEPOINT",
-            appid: 1203220,
-            playercount: 286380
-        },
-        {
-            name: "Apex Legends™",
-            appid: 1172470,
-            playercount: 217522
-        },
-        {
-            name: "Warhammer 40,000: Space Marine 2",
-            appid: 2183900,
-            playercount: 162600
-        },
-        {
-            name: "Grand Theft Auto V",
-            appid: 271590,
-            playercount: 145084
-        },
-        {
-            name: "Wallpaper Engine",
-            appid: 431960,
-            playercount: 155088
-        }
-    ]
-};
-
 /* -------- IGDB -------- */
 // https://api-docs.igdb.com/#endpoints
 export const getIgdbInfoFromSteamId = async (steamID) => {
@@ -395,14 +343,21 @@ export const getGames = async () => {
 
 }
 
-export const getGameStreams = async (twitchGameID) => {
+export const getGameStreams = async (twitchGameID, playerHeight, playerWidth) => {
     /// usage: await getGameStreams(*twitch_id from getSteamTopGames*)
     /// returns: array of objects containing stream metadata for the 10 highest viewer english language streams currently live in the games category.
     // we are mostly concerned with the embed_source key here which can be used to create a twitch player embed as detailed here: https://dev.twitch.tv/docs/embed/video-and-clips/ we will need to append our own &parent tag for our domain though (and also allow that domain in twitch api! - atm i have only allowed http://localhost:5500)
     const streams = await getTwitchGameStreams(twitchGameID,10);
     for (const stream of streams) {
-        stream.embed_source = `https://player.twitch.tv/?channel=${stream.user_name}`;
+        stream.embed_source = `https://player.twitch.tv/?channel=${stream.user_name}?parent=${clientDomain}`;
         stream.url = `https://www.twitch.tv/${stream.user_name}`;
+        if (typeof document !== 'undefined') {
+            const iframe = document.createElement('iframe');
+            iframe.setAttribute("src", `${stream.embed_source}`);
+            iframe.setAttribute("height", `${playerHeight}`);
+            iframe.setAttribute("width", `${playerWidth}`);
+            stream.embed_iframe = iframe;
+        }
     }
     return streams;
 }
@@ -422,8 +377,9 @@ export const getGameStats = () => {
 
 /* -------- RUN -------- */
 
-// export async function run() {
-//     await setTwitchAuthToken();
-//     console.log(await getGames());
-// }
-// run();
+export async function run() {
+    await setTwitchAuthToken();
+    // console.log(await getGames());
+    console.log(await getGameStreams(1441208453));
+}
+run();
