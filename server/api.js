@@ -3,9 +3,12 @@ import dotenv from "dotenv";
 dotenv.config();
 
 /* -------- TWITCH -------- */
+// https://dev.twitch.tv/docs/api/reference/
+
 let twitchAuthToken;
 const twitchClientID = process.env.TWITCH_CLIENT_KEY;
 const twitchClientSecret = process.env.TWITCH_CLIENT_SECRET;
+
 const setTwitchAuthToken = async () => {
     try {
         const response = await fetch(
@@ -32,7 +35,6 @@ const validateTwitchAuthToken = async () => {
         console.error("can't find your twitch auth token! is it set in your .env?")
         return;
     }
-    
     try {
         const response = await fetch(
             "https://id.twitch.tv/oauth2/validate", {
@@ -47,14 +49,15 @@ const validateTwitchAuthToken = async () => {
     catch (err) {
         console.error(`twitch auth token failed to validate!\n ${err}`);
     }
-}
+};
 
-const getTwitchGameInfo = async(gameName) => {
+export const getTwitchGameInfoByIgdb = async(igdbID) => {
     /// usage: await getTwitchGameInfo("World of Warcraft");
-    /// returns a single object
+    /// returns a single object with info about the game. Keys include: (id, name, box_art_url, igdb_id)
     try {
-        let paramStr = `name=${gameName}`;
-        const url = "https://api.twitch.tv/helix/games?" + new URLSearchParams(paramStr);
+        let paramStr = `igdb_id=${igdbID}`;
+        const url = "https://api.twitch.tv/helix/games?" 
+        + new URLSearchParams(paramStr);
         const response = await fetch(url,{
             headers: {
                 "Authorization": `Bearer ${twitchAuthToken}`,
@@ -62,7 +65,28 @@ const getTwitchGameInfo = async(gameName) => {
             }
         });
         const responseJSON = await response.json();
-        console.log(responseJSON.data[0])
+        return responseJSON.data;
+    }
+    catch (err) {
+        console.log(`failed getting game info for ${igdbID}`);
+        console.error(err);
+    }
+};
+
+export const getTwitchGameInfoByName = async(gameName) => {
+    /// usage: await getTwitchGameInfo("World of Warcraft");
+    /// returns a single object with info about the game. Keys include: (id, name, box_art_url, igdb_id)
+    try {
+        let paramStr = `name=${gameName}`;
+        const url = "https://api.twitch.tv/helix/games?" 
+        + new URLSearchParams(paramStr);
+        const response = await fetch(url,{
+            headers: {
+                "Authorization": `Bearer ${twitchAuthToken}`,
+                "Client-Id": twitchClientID
+            }
+        });
+        const responseJSON = await response.json();
         return responseJSON.data[0];
     }
     catch (err) {
@@ -71,16 +95,17 @@ const getTwitchGameInfo = async(gameName) => {
     }
 };
 
-const getTwitchGamesInfo = async(gamesList) => { 
+export const getTwitchGamesInfo = async(gamesList) => { 
     /// usage: await getTwitchGamesInfo(["Fortnite", "World of Warcraft", "League of Legends"]);
-    /// returns an array of objects
+    /// returns an array of objects with info about the games. Keys include: (id, name, box_art_url, igdb_id)
     try {
-        let paramStr;
+        let paramStr = "";
         for (let i=0; i < gamesList.length; i++) {
             if (i>0) paramStr += "&";
             paramStr += "name=" + gamesList[i];
         }
-        const url = "https://api.twitch.tv/helix/games?" + new URLSearchParams(paramStr);
+        const url = "https://api.twitch.tv/helix/games?" 
+            + new URLSearchParams(paramStr);
         const response = await fetch(url,{
             headers: {
                 "Authorization": `Bearer ${twitchAuthToken}`,
@@ -88,7 +113,6 @@ const getTwitchGamesInfo = async(gamesList) => {
             }
         });
         const responseJSON = await response.json();
-        console.log(responseJSON.data);
         return responseJSON.data;
     }
     catch (err) {
@@ -97,21 +121,126 @@ const getTwitchGamesInfo = async(gamesList) => {
     }
 };
 
-const getTwitchGameStreams = async(gameName) => {
-    // todo
+export const getTwitchGameClips = async(gameID, amount, days) => {
+    /// usage: await getTwitchGameClips(*twitch game id*, *amount of clips to get*, *how many days in past to start getting from*)
+    /// returns array of objects with clip data of top clips from chosen game. Keys include: (id, url, embed_url, broadcaster_id, broadcaster_name, title, thumbnail_url, duration, language) and more (console.log for full)
+    try {
+        const currentDate = new Date();
+        let startDate = new Date(currentDate - (1000*60*60*24*days));
+        startDate = startDate.toISOString();
+        const url = "https://api.twitch.tv/helix/clips?"
+        + new URLSearchParams({
+            "game_id": gameID.toString(),
+            "started_at": startDate,
+            "first": `${amount}` // how many clips to get (max: 100)
+        });
+        const response = await fetch(url, {
+            headers: {
+                "Authorization": `Bearer ${twitchAuthToken}`,
+                "Client-Id": twitchClientID
+            }
+        });
+        const responseJSON = await response.json();
+        return responseJSON.data;
+    }
+    catch(err) {
+        console.log(`failed to get twitch clips for game-id: ${gameID}`);
+        console.error(err);
+    }
 };
 
-const getTwitchGameClips = async(gameName) => {
-    // todo
+export const getTwitchGameStreams = async(gameID, amount) => {
+    /// usage: await getTwitchGameStreams(*twitch game id*, *amount of streams to get*)
+    /// returns array of objects with stream data of english language streams of the chosen game that are currently live. Sorted by viewers high to low. Keys include: (id, user_name(THIS IS THE CHANNEL NAME), game name, title, thumbnail_url, tags, is_mature) and more (console.log for full)
+    try {
+        const url = "https://api.twitch.tv/helix/streams?"
+        + new URLSearchParams({
+            "game_id": gameID.toString(),
+            "type": "live",
+            "language": "en",
+            "first": `${amount}` // how many clips to get (max: 100)
+        });
+        const response = await fetch(url, {
+            headers: {
+                "Authorization": `Bearer ${twitchAuthToken}`,
+                "Client-Id": twitchClientID
+            }
+        });
+        const responseJSON = await response.json();
+        return responseJSON.data;
+    }
+    catch(err) {
+        console.log(`failed to get twitch streams for game-id: ${gameID}`);
+        console.error(err);
+    }
 };
 
 
 /* -------- STEAM -------- */
-let steamAuthToken;
-const steamClientID = process.env.STEAM_CLIENT_KEY;
-const steamClientSecret = process.env.STEAM_CLIENT_SECRET;
+// https://steamapi.xpaw.me/#IStoreService/GetAppInfo
 
-const getSteamGamePlayerCount = async(gameID) => {
+const steamClientKey = process.env.STEAM_CLIENT_KEY;
+
+export const getSteamTop100ByCurrentPlayers = async() => {
+    /// usage: await getSteamTop100ByCurrentPlayers()
+    /// returns top 100 games as an array of objects, each with values for:
+    /// (rank, appid, concurrent_in_game, peak_in_game)
+    try {
+        const url = "https://api.steampowered.com/ISteamChartsService/GetGamesByConcurrentPlayers/v1/"
+        const response = await fetch(url, {
+            method: "GET"
+        });
+        const responseJSON = await response.json();
+        const gamesRanked = responseJSON.response.ranks;
+        const lastUpdated = responseJSON.response.last_update; // return this later if we end up needing
+        return gamesRanked;
+    }
+    catch(err) {
+        console.log("failed to get top 100 games from steam");
+        console.error(err);
+    }
+}
+
+export const getSteamGameInfo = async(gameID) => {
+    /// usage: await getSteamGameInfo(*appid for steam game*)
+    /// returns a single object with all available information about
+    /// the game. eg: name, description, platforms, images, trailers,
+    /// ratings and more. Console.log the function to get a complete list
+    try {
+        let paramStr = `appids=${gameID}`
+        const url = "https://store.steampowered.com/api/appdetails?" 
+        + new URLSearchParams(paramStr);
+        const response = await fetch(url, {
+            method: "GET"
+        });
+        const responseJSON = await response.json();
+        const gameInfo = responseJSON[gameID].data;
+        return gameInfo;
+    }
+    catch(err) {
+        console.log(`failed to get game name for game_id: ${gameID}`);
+        console.error(err);
+    }
+}
+
+export const getSteamTopGames = async(amount) => {
+    /// usage: await getSteamTopGames(*top x number of games to fetch*)
+    /// returns top x games as an array of objects, each with values for:
+    /// (rank, appid, concurrent_in_game, peak_in_game)
+    try {
+        let top100 = await getSteamTop100ByCurrentPlayers();
+        let topX = top100.slice(0,amount);
+        return topX;
+    }
+    catch(err) {
+        console.log(`failed to get top ${amount} games from steam`)
+        console.error(err);
+    }
+}
+
+export const getSteamGamePlayerCount = async(gameID) => {
+    /// usage: await getSteamPlayerCount(*steam game id*)
+    /// returns integer with current player count
     try {
         let paramStr = `appid=${gameID}`;
         const url = "https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?"
@@ -120,29 +249,13 @@ const getSteamGamePlayerCount = async(gameID) => {
             method: "GET"
         });
         const responseJSON = await response.json();
-        console.log(responseJSON);
-        return responseJSON;
+        return responseJSON.response.player_count;
     }
     catch(err) {
         console.log(`failed getting player count for game id: ${gameID}`);
         console.error(err);
     }
 }
-
-const addSteamGamesPlayerCount = (gamesArr) => {
-    gamesArr.forEach(element => {
-        element.playercount = getSteamGamePlayerCount(element.appid);
-    });
-    // console.log(gamesArr);
-}
-
-const getSteamTop10GamesPlayerCount = async() => {
-    let top100 = await getSteamTop100GamesIn2Weeks();
-    console.log(top100);
-    // let top100PlayerCount = await addSteamGamesPlayerCount(top100);
-    // console.log(top100PlayerCount);
-
-};
 
 export const getSteamTop10Games = () => {
     return [
@@ -196,115 +309,118 @@ export const getSteamTop10Games = () => {
             appid: 431960,
             playercount: 155088
         }
-
     ]
 };
 
-/* -------- STEAM SPY -------- */
-
-const getSteamTop100GamesIn2Weeks = async() => { 
-    /* 
-    steamspy no longer provides any data for playtime.
-    so we can manually get this afterwards using the entries here.
-    this data is potentially innacurate too though.
-    another option could be to scrape the steam most played page for the data.
-    (eww scraping) - (should avoid scraping if possible because isn't responsive to changes in the webpage that ois scraped)
-    */
-    
-    /// returns an array of object
+/* -------- IGDB -------- */
+// https://api-docs.igdb.com/#endpoints
+export const getIgdbInfoFromSteamId = async (steamID) => {
     try {
-        const url = "https://steamspy.com/api.php?request=top100in2weeks";
-        const response = await fetch(url,{
-            method: "GET"
+        const url = "https://api.igdb.com/v4/games" 
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${twitchAuthToken}`,
+                "Client-Id": twitchClientID,
+                "Accept": "application/json"
+            },
+            body: `
+                fields id, name, aggregated_rating, aggregated_rating_count, artworks, keywords, rating, websites;
+                where (websites.url = "https://store.steampowered.com/app/${steamID}") | (websites.url = "https://store.steampowered.com/app/${steamID}/");
+            `
         });
         const responseJSON = await response.json();
-        let responseArr = Object.entries(responseJSON);
-        console.log(responseArr);
-        // console.log(JSON.parse(responseJSON));
-        // return JSON.parse(responseJSON);
+        return responseJSON[0];
     }
-    catch (err) {
+    catch(err) {
+        console.log(`failed to get igdb_id for game_id: ${steamID}`);
         console.error(err);
     }
-};
+}
+
+
+/* -------- OUTPUT FUNCTIONS -------- */
+export const getGames = async () => {
+    /// usage: await getGames()
+    /// returns an array of objects for each of the top 10 games containing metadata for the game from all 3 platforms (steam, twitch & IGDB), the specific keys provided can be seen below or by console.log(await getGames())
+    // SOME KEYS OF NOTE: names on each platform, description, images, genres, ratings, trailers, and websites. 
+
+    const games = await getSteamTopGames(10); // get top 10 games
+    for (const game of games) {
+
+        game.steam_id = game.appid;
+        delete game.appid;
+
+        const gameInfo = await getSteamGameInfo(game.steam_id);
+        // add data from steam here:
+        game.name = gameInfo.name;
+        game.description = gameInfo.short_description;
+        game.description_full = gameInfo.detailed_description;
+        game.thumbnail_image = gameInfo.capsule_image;
+        game.background_image = gameInfo.background;
+        game.bg_image_raw = gameInfo.background_raw;
+        game.header_image = gameInfo.header_image;
+        game.trailers = gameInfo.movies;
+        game.release_date = gameInfo.releaase_date;
+        game.genre = gameInfo.genres[0].description;
+        game.developers = gameInfo.developers;
+        game.publishers = gameInfo.publishers;
+
+        const igdbInfo = await getIgdbInfoFromSteamId(game.steam_id);
+        // add data from IGDB here:
+        game.igdb_id = igdbInfo.id;
+        game.igdb_name = igdbInfo.name;
+        game.aggregated_rating = igdbInfo.aggregated_rating;
+        game.aggregated_rating_count = igdbInfo.aggregated_rating_count;
+        game.artworks = igdbInfo.artworks;
+        game.keywords = igdbInfo.keywords;
+        game.igdb_rating = igdbInfo.rating;
+        game.website = igdbInfo.websites;
+        
+        const twitchInfo = await getTwitchGameInfoByName(game.igdb_name);
+        // add data from twitch here:
+        game.twitch_id = twitchInfo.id;
+        game.twitch_name = twitchInfo.name;
+        game.twitch_boxart = twitch.box_art_url;
+
+    };
+
+    return games;
+
+}
+
+export const getGameStreams = async (twitchGameID) => {
+    /// usage: await getGameStreams(*twitch_id from getSteamTopGames*)
+    /// returns: array of objects containing stream metadata for the 10 highest viewer english language streams currently live in the games category.
+    // we are mostly concerned with the embed_source key here which can be used to create a twitch player embed as detailed here: https://dev.twitch.tv/docs/embed/video-and-clips/ we will need to append our own &parent tag for our domain though (and also allow that domain in twitch api! - atm i have only allowed http://localhost:5500)
+    const streams = await getTwitchGameStreams(twitchGameID,10);
+    for (const stream of streams) {
+        stream.embed_source = `https://player.twitch.tv/?channel=${stream.user_name}`;
+        stream.url = `https://www.twitch.tv/${stream.user_name}`;
+    }
+    return streams;
+}
+
+export const getGameClips = async (twitchGameID) => {
+    /// usage: await getGameClips(*twitch_id from getSteamTopGames*)
+    /// returns: array of objects containing clip metadata for the 10 most-viewed clips in the games category over the past 7 days.
+    // we are mostly concerned with the embed_url key, which can be used to create a twitch player embed as detailed here: https://dev.twitch.tv/docs/embed/video-and-clips/ we will need to append our own &parent tag for our domain though (and also allow that domain in twitch api! - atm i have only allowed http://localhost:5500)
+    const clips = await getTwitchGameClips(twitchGameID,10,7);
+    return clips;
+}
+
+export const getGameStats = () => {
+    // not sure if needed or if the data within getGames() is sufficient and workable. I can build out further if needed.
+    //todo
+}
 
 /* -------- RUN -------- */
-async function run() {
-    // await setTwitchAuthToken();
-    // await getTwitchGameInfo("World of Warcraft");
-    // await getTwitchGamesInfo(["Fortnite", "World of Warcraft", "League of Legends"]);
-    // await getSteamTop100GamesIn2Weeks();
-    // await  getSteamGamePlayerCounts(2358720);
-    await getSteamTop10GamesPlayerCount()
-}
+// async function run() {
+//     await setTwitchAuthToken();
+
+
+//     // getGames();
+//     // getGameStreams(512923);
+//     // getGameClips(512923);
+// }
 // run();
-
-
-
-// let tiktokAuthToken;
-// const setTiktokAuthToken = async () => {
-//   try {
-//     const response = await fetch(
-//       "https://open.tiktokapis.com/v2/oauth/token/",
-//       {
-//         headers: {
-//           "Content-Type": "application/x-www-form-urlencoded",
-//           "Cache-Control": "no-cache",
-//         },
-//         method: "POST",
-//         body: new URLSearchParams({
-//           client_key: process.env.TIKTOK_CLIENT_KEY,
-//           client_secret: process.env.TIKTOK_CLIENT_SECRET,
-//           grant_type: "client_credentials",
-//         }),
-//       }
-//     );
-//     const responseJSON = await response.json();
-//     console.log(responseJSON);
-//     if (responseJSON.access_token) {
-//       tiktokAuthToken = responseJSON.access_token;
-//     }
-//   } catch (err) {
-//     console.error(err);
-//   }
-// };
-
-
-// ----- API GETS ------ //
-
-
-
-// const getTiktokData = async () => {
-//   try {
-//     let paramStr = "fields=id,like_count";
-//     const url =
-//         "https://open.tiktokapis.com/v2/research/video/query/?"
-//         + new URLSearchParams(paramStr);
-//     const response = await fetch(url, {
-//         method: 'POST',
-//         headers: {
-//             authorization: `bearer ${tiktokAuthToken}`,
-//         },
-//         body: `{
-//             "query": {
-//                 "and": [
-//                     { "operation": "IN", "field_name": "region_code", "field_values": ["US", "CA"] },
-//                     { "operation": "EQ", "field_name": "keyword", "field_values": ["hello world"] }
-//                 ]
-//             },
-//             "start_date": "20240124",
-//             "end_date": "20250124"
-//             "max_count": 10
-//         }`
-//     });
-//     const responseJSON = await response.json();
-//     let videoData = responseJSON.data;
-//     console.log("fqpoihrfwqeoihtf");
-//     console.log(videoData);
-//   } catch (err) {
-//     console.log("failed getting data");
-//     console.error(err);
-//   }
-// };
-// setTiktokAuthToken();
-// getTiktokData();
