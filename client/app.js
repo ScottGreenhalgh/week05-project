@@ -64,7 +64,8 @@ async function getHandler(endpoint, container) {
 
           const data = { twitch_id: game.twitch_id };
           console.log(data);
-          const response = await fetch(
+          // streams
+          const streamResponse = await fetch(
             hostPrefix + hostLocation + "/twitchstream",
             {
               method: "POST",
@@ -74,17 +75,44 @@ async function getHandler(endpoint, container) {
               body: JSON.stringify(data),
             }
           );
-          console.log(response);
-          const responseData = await response.json();
-          console.log(`From the server (twitchstream): `, responseData);
+          console.log(streamResponse);
+          const streamResponseData = await streamResponse.json();
+          console.log(`From the server (twitchstream): `, streamResponseData);
 
           const twitchContainer = document.getElementById("twitch-element");
-          const iframe = document.createElement("iframe");
+          streamResponseData.forEach(function (stream) {
+            twitchContainer.innerHTML = "";
+            const iframeStream = document.createElement("iframe");
+            iframeStream.src = stream.embed_source;
+            iframeStream.setAttribute("allowfullscreen", true);
 
-          iframe.src = responseData[0].embed_source;
-          iframe.setAttribute("allowfullscreen", true);
+            twitchContainer.appendChild(iframeStream);
+          });
+          // clips
+          const clipsResponse = await fetch(
+            hostPrefix + hostLocation + "/twitchclips",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(data),
+            }
+          );
 
-          twitchContainer.appendChild(iframe);
+          const clipsResponseData = await clipsResponse.json();
+          console.log(`From the server (twitchclips): `, streamResponseData);
+
+          const clipsContainer = document.getElementById("clips-element");
+
+          clipsResponseData.forEach(function (clip) {
+            clipsContainer.innerHTML = "";
+            const iframeClips = document.createElement("iframe");
+            iframeClips.src = clip.embed_source;
+            iframeClips.setAttribute("allowfullscreen", true);
+
+            clipsContainer.appendChild(iframeClips);
+          });
         }
 
         getHandler("comments", commentContainer);
