@@ -7,6 +7,7 @@ const wsProtocol = import.meta.env.VITE_WS_HOST;
 let selectedGame = "";
 
 const commentContainer = document.getElementById("comments-element");
+const statsContainer = document.getElementById("stats-element");
 
 // ----------- Game Headings / Comments -----------
 
@@ -18,19 +19,14 @@ async function getHandler(endpoint, container) {
     container.innerHTML = "";
     data.forEach(function (game) {
       //clickable game titles
-      const p = document.createElement("p");
       const img = document.createElement("img");
-
-      p.id = "title" + game.rank;
-      p.className = "title";
-      p.textContent = game.name;
 
       img.src = game.thumbnail_image;
       img.alt = "image of" + game.name;
       img.id = "titleImage" + game.rank;
       img.class = "titleImage";
 
-      p.addEventListener("click", function () {
+      img.addEventListener("click", function () {
         selectedGame = game.name;
         console.log("Selected game:", selectedGame);
 
@@ -41,7 +37,6 @@ async function getHandler(endpoint, container) {
         getHandler("comments", commentContainer);
       });
 
-      container.appendChild(p);
       container.appendChild(img);
     });
   }
@@ -193,8 +188,6 @@ commentContainer.addEventListener("click", async function (event) {
     getHandler("comments", commentContainer);
   }
 });
-
-// --------- API Database ---------
 
 //  -------- Websocket ----------
 
