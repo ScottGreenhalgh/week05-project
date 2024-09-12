@@ -21,47 +21,49 @@
       <div id="twitch-element"></div>
       <div id="clips-element"></div>
       <div id="stats-element"></div>
-      <div id="comments-element"></div>
-      <div id="comments-form-element">
-        <form id="comments" style="display: none">
-          <input
-            type="text"
-            id="username-box"
-            class="input-box"
-            for="text-input"
-            name="username"
-            placeholder="Username"
-            required
-            aria-label="your display name"
-          />
-          <textarea
-            id="message-box"
-            class="input-box"
-            for="text-input"
-            name="message"
-            placeholder="Comment"
-            required
-            aria-label="your message text"
-          ></textarea>
-          <input
-            type="range"
-            min="1"
-            max="5"
-            value="3"
-            name="reviewscore"
-            class="review-slider"
-            id="review-score"
-            aria-label="select review score, one to five"
-          />
-          <button
-            type="submit"
-            class="submit-button"
-            name="commentdata"
-            aria-label="submit comment"
-          >
-            Submit
-          </button>
-        </form>
+      <div id="comments-container">
+        <div id="comments-element"></div>
+        <div id="comments-form-element">
+          <form id="comments" style="display: none">
+            <input
+              type="text"
+              id="username-box"
+              class="input-box"
+              for="text-input"
+              name="username"
+              placeholder="Username"
+              required
+              aria-label="your display name"
+            />
+            <textarea
+              id="message-box"
+              class="input-box"
+              for="text-input"
+              name="message"
+              placeholder="Comment"
+              required
+              aria-label="your message text"
+            ></textarea>
+            <input
+              type="range"
+              min="1"
+              max="5"
+              value="3"
+              name="reviewscore"
+              class="review-slider"
+              id="review-score"
+              aria-label="select review score, one to five"
+            />
+            <button
+              type="submit"
+              class="submit-button"
+              name="commentdata"
+              aria-label="submit comment"
+            >
+              Submit
+            </button>
+          </form>
+        </div>
       </div>
     </main>
     <!-- End Main -->
