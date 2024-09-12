@@ -1,3 +1,9 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 /* Main background settings with smooth gradient and animated horizontal shift */
 body {
   background: linear-gradient(
@@ -41,24 +47,16 @@ body {
   height: auto;
 }
 
-/* Responsive styling for mobile screens */
-@media (max-width: 767px) {
-  .logo {
-    max-width: 150px; /* Reduces logo size on smaller screens */
-  }
-}
-
 /* Header styling for the games container */
 #games {
-display: flex;
-overflow-x: auto;
-white-space: nowrap;
-scroll-behavior: smooth;
-scrollbar-width: thin;
-scrollbar-track-color: transparent;
-scrollbar-color: #6756b0;
-border-radius: 25px;
-margin: 20px;
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-track-color: transparent;
+  scrollbar-color: #6756b0;
+  margin: 20px;
 }
 
 #games::-webkit-scrollbar-track {
@@ -68,7 +66,6 @@ margin: 20px;
 #games::-webkit-scrollbar {
   border-radius: 2px;
   height: 4px;
-
 }
 
 #games::-webkit-scrollbar-thumb {
@@ -76,37 +73,103 @@ margin: 20px;
 }
 
 #games:hover {
-cursor: pointer;
+  cursor: pointer;
 }
 
+/* ----- Containers ----- */
 
+main {
+  display: flex;
+  flex-direction: row;
+}
 
 #twitch-element {
   display: flex;
-  justify-content: left;
-  align-items: left;
+  justify-content: center;
   flex-direction: row;
-  width: 100%;  
-  margin: 30px;
+  height: 100%;
+  width: 50%;
+
+  background-color: #6756b02d;
+
+  border-color: #6756b0;
+  border-width: 5px;
+  border-style: solid;
+  border-radius: 25px;
+
+  padding: 0.5rem;
+  margin: 0.5rem;
 }
 
 #clips-element {
   display: flex;
-  justify-content: last baseline;
-  align-items: center;
-  width: 100%;
-  margin: 30px;
+  justify-content: center;
+  height: 100%;
+  width: 50%;
+
+  background-color: #6756b02d;
+
+  border-color: #6756b0;
+  border-width: 5px;
+  border-style: solid;
+  border-radius: 25px;
+
+  padding: 0.5rem;
+  margin: 0.5rem;
 }
 
 #stats-element {
   display: flex;
-  justify-content: space-evenly;
-  align-items: right;
+  justify-content: center;
+  flex-direction: column;
   width: 100%;
-  margin: 30px;
+
+  background-color: #6756b02d;
+
   border-color: #6756b0;
-  border-width: 5px; 
+  border-width: 5px;
   border-style: solid;
   border-radius: 25px;
-  margin: 20px;
+
+  padding: 30px;
+  margin: 0.5rem;
+}
+
+#comments-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+
+  background-color: #6756b02d;
+
+  border-color: #6756b0;
+  border-width: 5px;
+  border-style: solid;
+  border-radius: 25px;
+
+  margin: 0.5rem;
+}
+
+#comments-form-element {
+  position: absolute;
+  bottom: 0;
+}
+
+#comments {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Responsive styling for mobile screens */
+@media (max-width: 767px) {
+  .logo {
+    max-width: 150px; /* Reduces logo size on smaller screens */
+  }
+
+  main {
+    display: flex;
+    flex-direction: column;
+  }
 }
