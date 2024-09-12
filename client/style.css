@@ -81,6 +81,7 @@ body {
 main {
   display: flex;
   flex-direction: row;
+  color: rgb(218, 218, 218);
 }
 
 #twitch-element {
@@ -131,7 +132,7 @@ main {
   border-style: solid;
   border-radius: 25px;
 
-  padding: 30px;
+  padding: 1rem;
   margin: 0.5rem;
 }
 
@@ -149,6 +150,7 @@ main {
   border-style: solid;
   border-radius: 25px;
 
+  padding: 1rem;
   margin: 0.5rem;
 }
 

@@ -30,9 +30,10 @@ async function getHandler(endpoint, container) {
         console.log("Selected game:", selectedGame);
 
         if (selectedGame !== "") {
-          document.getElementById("comments").style.display = "block";
+          document.getElementById("main").style.display = "flex";
         }
         if (selectedGame === game.name) {
+          //stats
           const statsContainer = document.getElementById("stats-element");
           statsContainer.innerHTML = "";
 
@@ -43,6 +44,14 @@ async function getHandler(endpoint, container) {
           const developersStats = document.createElement("p");
           const publishersStats = document.createElement("p");
           const genreStats = document.createElement("p");
+
+          titleStats.id = "titleStats";
+          currentPlayers.id = "playStats";
+          peakPlayers.id = "peakStats";
+          descriptionStats.id = "descStats";
+          developersStats.id = "devStats";
+          publishersStats.id = "pubStats";
+          genreStats.id = "genStats";
 
           titleStats.innerHTML = game.name;
           currentPlayers.innerHTML =
@@ -134,6 +143,9 @@ async function getHandler(endpoint, container) {
         const delButton = document.createElement("button");
         const likeButton = document.createElement("button");
         const dislikeButton = document.createElement("button");
+        const individualComments = document.createElement("div");
+
+        individualComments.className = "comments-div";
 
         p.textContent = `"${dbData.message}" - ${dbData.username}`;
         p.className = "comments-text";
@@ -153,10 +165,12 @@ async function getHandler(endpoint, container) {
         dislikeButton.setAttribute("aria-label", "Disike button");
         dislikeButton.id = "dislike" + dbData.id;
 
-        container.appendChild(p);
-        container.appendChild(delButton);
-        container.appendChild(likeButton);
-        container.appendChild(dislikeButton);
+        individualComments.appendChild(p);
+        individualComments.appendChild(delButton);
+        individualComments.appendChild(likeButton);
+        individualComments.appendChild(dislikeButton);
+
+        container.appendChild(individualComments);
       }
     });
   }
