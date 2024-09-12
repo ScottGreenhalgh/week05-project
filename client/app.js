@@ -98,7 +98,7 @@ async function getHandler(endpoint, container) {
             loadStream(streamPointer);
           }
           function nextStream() {
-            if (streamPointer === streamResponseData.length) { return };
+            if (streamPointer === streamResponseData.length-1) { return };
             streamPointer++;
             loadStream(streamPointer);
           }
@@ -111,9 +111,10 @@ async function getHandler(endpoint, container) {
             
 
             const prevStreamButton = document.createElement("a");
-            prevStreamButton.innerText = "Prev Stream"; 
+            // prevStreamButton.innerText = "Prev Stream"; 
+            prevStreamButton.classList.add("nav-button","stream-button", "prev-button");
             const faPrev = document.createElement('i');
-            faPrev.classList.add("fa-solid", "fa-chevron-left", "left-button");
+            faPrev.classList.add("fa-solid", "fa-chevron-left");
             prevStreamButton.appendChild(faPrev);
             if (streamPointer > 0) {
               prevStreamButton.addEventListener('click',prevStream);
@@ -124,11 +125,12 @@ async function getHandler(endpoint, container) {
             twitchContainer.appendChild(prevStreamButton);
 
             const nextStreamButton = document.createElement("a");
+            nextStreamButton.classList.add("nav-button","stream-button", "next-button");
             const faNext = document.createElement('i');
-            nextStreamButton.innerText = "Next Stream"; 
-            faNext.classList.add("fa-solid", "fa-chevron-right", "right-button");
+            // nextStreamButton.innerText = "Next Stream"; 
+            faNext.classList.add("fa-solid", "fa-chevron-right");
             nextStreamButton.appendChild(faNext);
-            if (streamPointer < streamResponseData.length) {
+            if (streamPointer < streamResponseData.length-1) {
               nextStreamButton.addEventListener('click',nextStream);
             }
             else {
@@ -163,7 +165,7 @@ async function getHandler(endpoint, container) {
             loadClip(clipPointer, true);
           }
           function nextClip() {
-            if (clipPointer === clipsResponseData.length) { return };
+            if (clipPointer === clipsResponseData.length-1) { return; };
             clipPointer++;
             loadClip(clipPointer, true);
           }
@@ -183,13 +185,13 @@ async function getHandler(endpoint, container) {
             iframeClips.src = iframeClips.src; // reload the iframe to trigger autoplay
             
             const prevClipButton = document.createElement("a");
+            prevClipButton.classList.add("nav-button","clip-button", "prev-button");
+            // prevClipButton.innerText = "Prev Clip";
             const faPrevClip = document.createElement('i');
-            prevClipButton.innerText = "Prev Clip";
-            faPrevClip.classList.add("fa-solid", "fa-chevron-left", "left-button");
+            faPrevClip.classList.add("fa-solid", "fa-chevron-left");
             prevClipButton.appendChild(faPrevClip);
             if (clipPointer > 0) {
               prevClipButton.addEventListener('click',prevClip);  
-
             }
             else {
               prevClipButton.classList.add('disabled-button');
@@ -197,11 +199,12 @@ async function getHandler(endpoint, container) {
             clipsContainer.appendChild(prevClipButton);
 
             const nextClipButton = document.createElement("a");
+            // nextClipButton.innerText = "Next Clip"; 
+            nextClipButton.classList.add("nav-button","clip-button", "next-button");
             const faNextClip = document.createElement('i');
-            nextClipButton.innerText = "Next Clip"; 
-            faNextClip.classList.add("fa-solid", "fa-chevron-right", "right-button");
+            faNextClip.classList.add("fa-solid", "fa-chevron-right");
             nextClipButton.appendChild(faNextClip);
-            if (clipPointer < clipsResponseData.length) {
+            if (clipPointer < clipsResponseData.length-1) {
               nextClipButton.addEventListener('click',nextClip);
             }
             else {
