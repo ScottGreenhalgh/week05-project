@@ -56,6 +56,9 @@ white-space: nowrap;
 scroll-behavior: smooth;
 scrollbar-width: thin;
 scrollbar-track-color: transparent;
+scrollbar-color: #6756b0;
+border-radius: 25px;
+margin: 20px;
 }
 
 #games::-webkit-scrollbar-track {
@@ -74,4 +77,36 @@ scrollbar-track-color: transparent;
 
 #games:hover {
 cursor: pointer;
+}
+
+
+
+#twitch-element {
+  display: flex;
+  justify-content: left;
+  align-items: left;
+  flex-direction: row;
+  width: 100%;  
+  margin: 30px;
+}
+
+#clips-element {
+  display: flex;
+  justify-content: last baseline;
+  align-items: center;
+  width: 100%;
+  margin: 30px;
+}
+
+#stats-element {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: right;
+  width: 100%;
+  margin: 30px;
+  border-color: #6756b0;
+  border-width: 5px; 
+  border-style: solid;
+  border-radius: 25px;
+  margin: 20px;
 }
