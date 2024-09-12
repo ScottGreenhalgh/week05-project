@@ -89,14 +89,54 @@ async function getHandler(endpoint, container) {
           console.log(`From the server (twitchstream): `, streamResponseData);
 
           const twitchContainer = document.getElementById("twitch-element");
-          streamResponseData.forEach(function (stream) {
+          let streamPointer = 0;
+          loadStream(0);
+
+          function prevStream() {
+            if (streamPointer === 0) { return; };
+            streamPointer--;
+            loadStream(streamPointer);
+          }
+          function nextStream() {
+            if (streamPointer === streamResponseData.length) { return };
+            streamPointer++;
+            loadStream(streamPointer);
+          }
+          function loadStream(streamPointer) {
             twitchContainer.innerHTML = "";
             const iframeStream = document.createElement("iframe");
-            iframeStream.src = stream.embed_source;
+            iframeStream.src = streamResponseData[streamPointer].embed_source;
             iframeStream.setAttribute("allowfullscreen", true);
-
             twitchContainer.appendChild(iframeStream);
-          });
+            
+
+            const prevStreamButton = document.createElement("a");
+            prevStreamButton.innerText = "Prev Stream"; 
+            const faPrev = document.createElement('i');
+            faPrev.classList.add("fa-solid", "fa-chevron-left", "left-button");
+            prevStreamButton.appendChild(faPrev);
+            if (streamPointer > 0) {
+              prevStreamButton.addEventListener('click',prevStream);
+            }
+            else {
+              prevStreamButton.classList.add('disabled-button');
+            }
+            twitchContainer.appendChild(prevStreamButton);
+
+            const nextStreamButton = document.createElement("a");
+            const faNext = document.createElement('i');
+            nextStreamButton.innerText = "Next Stream"; 
+            faNext.classList.add("fa-solid", "fa-chevron-right", "right-button");
+            nextStreamButton.appendChild(faNext);
+            if (streamPointer < streamResponseData.length) {
+              nextStreamButton.addEventListener('click',nextStream);
+            }
+            else {
+              nextStreamButton.classList.add('disabled-button');
+            }
+            twitchContainer.appendChild(nextStreamButton);
+          }
+
           // clips
           const clipsResponse = await fetch(
             hostPrefix + hostLocation + "/twitchclips",
@@ -114,14 +154,61 @@ async function getHandler(endpoint, container) {
 
           const clipsContainer = document.getElementById("clips-element");
 
-          clipsResponseData.forEach(function (clip) {
+          let clipPointer = 0;
+          loadClip(0, false);
+
+          function prevClip() {
+            if (clipPointer === 0) { return; };
+            clipPointer--;
+            loadClip(clipPointer, true);
+          }
+          function nextClip() {
+            if (clipPointer === clipsResponseData.length) { return };
+            clipPointer++;
+            loadClip(clipPointer, true);
+          }
+          function loadClip(clipPointer, autoplay) {
             clipsContainer.innerHTML = "";
             const iframeClips = document.createElement("iframe");
-            iframeClips.src = clip.embed_source;
+            if (autoplay == true) {
+              const embedUrl = `${clipsResponseData[clipPointer].embed_source}&autoplay=true&muted=false`;
+              console.log(embedUrl);
+              iframeClips.src = embedUrl;
+            }
+            else {
+              iframeClips.src = clipsResponseData[clipPointer].embed_source;
+            }
             iframeClips.setAttribute("allowfullscreen", true);
-
             clipsContainer.appendChild(iframeClips);
-          });
+            iframeClips.src = iframeClips.src; // reload the iframe to trigger autoplay
+            
+            const prevClipButton = document.createElement("a");
+            const faPrevClip = document.createElement('i');
+            prevClipButton.innerText = "Prev Clip";
+            faPrevClip.classList.add("fa-solid", "fa-chevron-left", "left-button");
+            prevClipButton.appendChild(faPrevClip);
+            if (clipPointer > 0) {
+              prevClipButton.addEventListener('click',prevClip);  
+
+            }
+            else {
+              prevClipButton.classList.add('disabled-button');
+            }
+            clipsContainer.appendChild(prevClipButton);
+
+            const nextClipButton = document.createElement("a");
+            const faNextClip = document.createElement('i');
+            nextClipButton.innerText = "Next Clip"; 
+            faNextClip.classList.add("fa-solid", "fa-chevron-right", "right-button");
+            nextClipButton.appendChild(faNextClip);
+            if (clipPointer < clipsResponseData.length) {
+              nextClipButton.addEventListener('click',nextClip);
+            }
+            else {
+              nextClipButton.classList.add('disabled-button');
+            }
+            clipsContainer.appendChild(nextClipButton);
+          }
         }
 
         getHandler("comments", commentContainer);
