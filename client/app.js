@@ -93,12 +93,16 @@ async function getHandler(endpoint, container) {
           loadStream(0);
 
           function prevStream() {
-            if (streamPointer === 0) { return; };
+            if (streamPointer === 0) {
+              return;
+            }
             streamPointer--;
             loadStream(streamPointer);
           }
           function nextStream() {
-            if (streamPointer === streamResponseData.length-1) { return };
+            if (streamPointer === streamResponseData.length - 1) {
+              return;
+            }
             streamPointer++;
             loadStream(streamPointer);
           }
@@ -108,33 +112,38 @@ async function getHandler(endpoint, container) {
             iframeStream.src = streamResponseData[streamPointer].embed_source;
             iframeStream.setAttribute("allowfullscreen", true);
             twitchContainer.appendChild(iframeStream);
-            
 
             const prevStreamButton = document.createElement("a");
-            // prevStreamButton.innerText = "Prev Stream"; 
-            prevStreamButton.classList.add("nav-button","stream-button", "prev-button");
-            const faPrev = document.createElement('i');
+            // prevStreamButton.innerText = "Prev Stream";
+            prevStreamButton.classList.add(
+              "nav-button",
+              "stream-button",
+              "prev-button"
+            );
+            const faPrev = document.createElement("i");
             faPrev.classList.add("fa-solid", "fa-chevron-left");
             prevStreamButton.appendChild(faPrev);
             if (streamPointer > 0) {
-              prevStreamButton.addEventListener('click',prevStream);
-            }
-            else {
-              prevStreamButton.classList.add('disabled-button');
+              prevStreamButton.addEventListener("click", prevStream);
+            } else {
+              prevStreamButton.classList.add("disabled-button");
             }
             twitchContainer.appendChild(prevStreamButton);
 
             const nextStreamButton = document.createElement("a");
-            nextStreamButton.classList.add("nav-button","stream-button", "next-button");
-            const faNext = document.createElement('i');
-            // nextStreamButton.innerText = "Next Stream"; 
+            nextStreamButton.classList.add(
+              "nav-button",
+              "stream-button",
+              "next-button"
+            );
+            const faNext = document.createElement("i");
+            // nextStreamButton.innerText = "Next Stream";
             faNext.classList.add("fa-solid", "fa-chevron-right");
             nextStreamButton.appendChild(faNext);
-            if (streamPointer < streamResponseData.length-1) {
-              nextStreamButton.addEventListener('click',nextStream);
-            }
-            else {
-              nextStreamButton.classList.add('disabled-button');
+            if (streamPointer < streamResponseData.length - 1) {
+              nextStreamButton.addEventListener("click", nextStream);
+            } else {
+              nextStreamButton.classList.add("disabled-button");
             }
             twitchContainer.appendChild(nextStreamButton);
           }
@@ -160,12 +169,16 @@ async function getHandler(endpoint, container) {
           loadClip(0, false);
 
           function prevClip() {
-            if (clipPointer === 0) { return; };
+            if (clipPointer === 0) {
+              return;
+            }
             clipPointer--;
             loadClip(clipPointer, true);
           }
           function nextClip() {
-            if (clipPointer === clipsResponseData.length-1) { return; };
+            if (clipPointer === clipsResponseData.length - 1) {
+              return;
+            }
             clipPointer++;
             loadClip(clipPointer, true);
           }
@@ -176,39 +189,44 @@ async function getHandler(endpoint, container) {
               const embedUrl = `${clipsResponseData[clipPointer].embed_source}&autoplay=true&muted=false`;
               console.log(embedUrl);
               iframeClips.src = embedUrl;
-            }
-            else {
+            } else {
               iframeClips.src = clipsResponseData[clipPointer].embed_source;
             }
             iframeClips.setAttribute("allowfullscreen", true);
             clipsContainer.appendChild(iframeClips);
             iframeClips.src = iframeClips.src; // reload the iframe to trigger autoplay
-            
+
             const prevClipButton = document.createElement("a");
-            prevClipButton.classList.add("nav-button","clip-button", "prev-button");
+            prevClipButton.classList.add(
+              "nav-button",
+              "clip-button",
+              "prev-button"
+            );
             // prevClipButton.innerText = "Prev Clip";
-            const faPrevClip = document.createElement('i');
+            const faPrevClip = document.createElement("i");
             faPrevClip.classList.add("fa-solid", "fa-chevron-left");
             prevClipButton.appendChild(faPrevClip);
             if (clipPointer > 0) {
-              prevClipButton.addEventListener('click',prevClip);  
-            }
-            else {
-              prevClipButton.classList.add('disabled-button');
+              prevClipButton.addEventListener("click", prevClip);
+            } else {
+              prevClipButton.classList.add("disabled-button");
             }
             clipsContainer.appendChild(prevClipButton);
 
             const nextClipButton = document.createElement("a");
-            // nextClipButton.innerText = "Next Clip"; 
-            nextClipButton.classList.add("nav-button","clip-button", "next-button");
-            const faNextClip = document.createElement('i');
+            // nextClipButton.innerText = "Next Clip";
+            nextClipButton.classList.add(
+              "nav-button",
+              "clip-button",
+              "next-button"
+            );
+            const faNextClip = document.createElement("i");
             faNextClip.classList.add("fa-solid", "fa-chevron-right");
             nextClipButton.appendChild(faNextClip);
-            if (clipPointer < clipsResponseData.length-1) {
-              nextClipButton.addEventListener('click',nextClip);
-            }
-            else {
-              nextClipButton.classList.add('disabled-button');
+            if (clipPointer < clipsResponseData.length - 1) {
+              nextClipButton.addEventListener("click", nextClip);
+            } else {
+              nextClipButton.classList.add("disabled-button");
             }
             clipsContainer.appendChild(nextClipButton);
           }
@@ -233,6 +251,7 @@ async function getHandler(endpoint, container) {
         const delButton = document.createElement("button");
         const likeButton = document.createElement("button");
         const dislikeButton = document.createElement("button");
+        const reviewScoreText = document.createElement("p");
         const individualComments = document.createElement("div");
 
         individualComments.className = "comments-div";
@@ -255,10 +274,16 @@ async function getHandler(endpoint, container) {
         dislikeButton.setAttribute("aria-label", "Disike button");
         dislikeButton.id = "dislike" + dbData.id;
 
+        reviewScoreText.textContent = "Review Score: " + dbData.reviewscore;
+        reviewScoreText.className = "review-score";
+        reviewScoreText.setAttribute("aria-label", "User review score");
+        reviewScoreText.id = "review" + dbData.id;
+
         individualComments.appendChild(p);
         individualComments.appendChild(delButton);
         individualComments.appendChild(likeButton);
         individualComments.appendChild(dislikeButton);
+        individualComments.appendChild(reviewScoreText);
 
         container.appendChild(individualComments);
       }

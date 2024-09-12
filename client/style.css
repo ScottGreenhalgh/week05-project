@@ -32,13 +32,14 @@ body {
   }
 }
 
-/* Logo container styling: centers logo */
+/* ---------- Header Element --------- */
 
 header {
   display: flex;
   flex-direction: row;
 }
 
+/* Logo container styling: centers logo */
 #logo {
   display: flex;
   justify-content: center;
@@ -127,11 +128,15 @@ iframe {
   overflow: hidden;
 }
 
+/* --------- Stats --------- */
+
 #stats-element {
   display: flex;
   justify-content: center;
   flex-direction: column;
   width: 98%;
+
+  font-size: 2rem;
 
   background-color: #6756b02d;
 
@@ -143,6 +148,39 @@ iframe {
   padding: 1rem;
   margin: 0.5rem;
 }
+
+#titleStats {
+  font-size: 2.5rem;
+
+  text-decoration: underline;
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+
+  padding-bottom: 0.2rem;
+}
+
+#playStats,
+#descStats,
+#pubStats {
+  color: #d6d0ec;
+
+  font-family: "Noto Serif", serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+
+  padding-bottom: 0.2rem;
+}
+
+#peakStats,
+#devStats,
+#genStats {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* --------- Comments ---------- */
 
 #comments-container {
   position: relative;
@@ -166,7 +204,19 @@ iframe {
 #comments-form-element {
   position: absolute;
   bottom: 1rem;
-  left: 15%;
+  left: 11.5%;
+}
+
+.review-text {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 72%;
+}
+
+.review-text-lower {
+  position: absolute;
+  bottom: -0.5rem;
+  left: 68%;
 }
 
 #comments {
@@ -175,13 +225,22 @@ iframe {
 }
 
 input,
-textarea,
 .submit-button {
   background-color: #b5a9eb;
   color: gray;
   border-radius: 1rem;
   border: white outset 2px;
   padding: 1rem;
+  margin-right: 1rem;
+}
+
+input:hover {
+  border: gold outset 2px;
+}
+
+.submit-button:active {
+  background-color: #5437d4;
+  color: white;
 }
 
 #review-score {
@@ -253,10 +312,25 @@ textarea,
   padding-right: 5px;
 }
 
+.like-button:hover,
+.dislike-button:hover,
+.delete-button:hover,
+.submit-button:hover {
+  border: gold outset 2px;
+  cursor: pointer;
+}
+
+.review-score {
+  position: absolute;
+  top: 0.33rem;
+  right: 6rem;
+  font-size: 1.2rem;
+}
+
 .nav-button {
   position: absolute;
   /* bottom: 1rem; */
-  background-color:#5437d494;
+  background-color: transparent; /* #5437d494; */
   /* border-radius: 10px; */
   padding: 0.2rem 0.4rem;
   height: 100%;
@@ -264,7 +338,7 @@ textarea,
   font-size: 3rem;
 }
 .nav-button:hover {
-  background-color: #5437d4b4;
+  background-color: transparent; /* #5437d4b4; */
 }
 .nav-button:hover > i {
   color: #b9afe3;
@@ -288,27 +362,14 @@ textarea,
   opacity: 0.2;
 }
 .disabled-button:hover {
-  background-color: #5437d494;
+  background-color: transparent; /*#5437d494;*/
 }
 .disabled-button:hover > i {
   color: #9f8def;
   transform: scale(1);
 }
 
-.stream-button {
-
-}
-.clip-button {
-
-}
-
-
-/* ------ Stats Styling -------- */
-
-#titleStats {
-  text-decoration: underline;
-  font-weight: bold;
-}
+/* ---------- Media ----------- */
 
 /* Responsive styling for mobile screens */
 @media (max-width: 767px) {
