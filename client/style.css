@@ -271,7 +271,7 @@ input:hover {
   border: white outset 2px;
 }
 
-/* ------- Buttons -------- */
+/* ------- Comments Buttons -------- */
 
 .like-button {
   position: absolute;
@@ -327,13 +327,15 @@ input:hover {
   font-size: 1.2rem;
 }
 
+/* -------- Stream/Clip Nav --------- */
+
 .nav-button {
   position: absolute;
   /* bottom: 1rem; */
   background-color: transparent; /* #5437d494; */
   /* border-radius: 10px; */
   padding: 0.2rem 0.4rem;
-  height: 100%;
+  height: 80%;
   cursor: pointer;
   font-size: 3rem;
 }
@@ -373,15 +375,11 @@ input:hover {
 
 /* Responsive styling for mobile screens */
 @media (max-width: 767px) {
+  /* -------- Mobile Header -------  */
   .logo {
-    width: 20svw;
+    width: 40svw;
     height: auto;
     max-width: 150px; /* Reduces logo size on smaller screens */
-  }
-
-  main {
-    display: flex;
-    flex-direction: column;
   }
 
   header {
@@ -391,5 +389,62 @@ input:hover {
 
   #logo {
     width: 100%;
+  }
+
+  /* ----- Mobile Containers ----- */
+
+  main {
+    display: flex;
+    flex-direction: column;
+  }
+
+  iframe {
+    height: 30svh;
+    width: 95svw;
+  }
+
+  /* ------- Mobile Comments -------- */
+
+  #comments {
+    display: flex;
+    flex-direction: column;
+    width: 90svw;
+  }
+
+  #comments-container {
+    padding-bottom: 15rem;
+  }
+
+  #comments-form-element {
+    position: absolute;
+    bottom: 1rem;
+    left: 5%;
+  }
+
+  .review-text {
+    position: absolute;
+    bottom: 5.3rem;
+    left: 30%;
+  }
+
+  .review-text-lower {
+    position: absolute;
+    bottom: 5.3rem;
+    left: 60%;
+  }
+
+  input,
+  .submit-button {
+    background-color: #b5a9eb;
+    color: gray;
+    border-radius: 1rem;
+    border: white outset 2px;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    margin-right: 0.5rem;
+  }
+
+  #message-box {
+    margin-bottom: 1rem;
   }
 }
