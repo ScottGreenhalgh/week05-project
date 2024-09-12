@@ -232,10 +232,53 @@ export const getSteamTopGames = async(amount) => {
     /// (rank, appid, concurrent_in_game, peak_in_game)
     try {
         let top100 = await getSteamTop100ByCurrentPlayers();
+        let top20 = top100.slice(0, amount);
 
-        // temporary exception for Wallpaper Engine (it is listed as a game instead of software in the steam api but doesn't have an entry on igdb or twitch)
-        top100 = top100.filter(obj => obj.appid !== 431960);
+        // get games to filter
+        let filterList = []; // list of steam appids to filter
+        for (const game of top20) {
 
+            // filter out games that have no igdb page
+            const igdbInfo = await getIgdbInfoFromSteamId(game.appid);
+            if (igdbInfo === undefined) {
+                filterList.push(game.appid);
+                continue;
+            }
+
+            // filter out games that have no twitch category
+            const twitchInfo = await getTwitchGameInfoByName(igdbInfo.name);
+            if (twitchInfo === undefined) {
+                filterList.push(game.appid);
+                continue;
+            }
+
+            // filter out games that have less than 10 streams
+            const twitchStreams = await getTwitchGameStreams(twitchInfo.id, amount);
+            console.log(igdbInfo.name);
+            console.log(twitchInfo.id);
+            console.log("streams: ",twitchStreams.length);
+            if (twitchStreams.length < amount) {
+                filterList.push(game.appid);
+                continue;
+            }
+
+            // filter out games that have less than 10 clips
+            const twitchClips = await getTwitchGameClips(twitchInfo.id, 5, 7);
+            console.log(igdbInfo.name);
+            console.log("clips: ",twitchClips.length);
+            if (twitchClips.length < 5) {
+                filterList.push(game.appid);
+                continue;
+            }
+        };
+        console.log("filter list: ", filterList);
+
+        // filter games
+        for (const appid of filterList) {
+            top100 = top100.filter(obj => obj.appid !== appid)
+        }
+        
+        // cut down to top x
         let topX = top100.slice(0,amount);
         return topX;
     }
@@ -360,7 +403,6 @@ export const getGameClips = async (twitchGameID) => {
     /// returns: array of objects containing clip metadata for the 10 most-viewed clips in the games category over the past 7 days.
     // we are mostly concerned with the embed_url key, which can be used to create a twitch player embed as detailed here: https://dev.twitch.tv/docs/embed/video-and-clips/ we will need to append our own &parent tag for our domain though (and also allow that domain in twitch api! - atm i have only allowed http://localhost:5500)
     const clips = await getTwitchGameClips(twitchGameID,10,7);
-    console.log(clips);
     for (const clip of clips) {
         console.log(clip);
         clip.embed_source = clip.embed_url + `&parent=${clientDomain}`;
@@ -377,7 +419,10 @@ export const getGameStats = () => {
 
 // export async function run() {
 //     await setTwitchAuthToken();
-//     console.log(await getGames());
-//     console.log(await getGameStreams(1441208453));
+//     // console.log(await getSteamTopGames(10));
+//     // console.log(await getTwitchGameClips(29595,10,7));
+//     // console.log(await getGames());
+//     // console.log(await getGameStreams(2923300));
+//     // console.log(await getIgdbInfoFromSteamId(431960));
 // }
 // run();
