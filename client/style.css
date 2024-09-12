@@ -19,6 +19,7 @@ body {
   background-repeat: no-repeat; /* No background repeat */
   background-attachment: fixed; /* Background stays fixed when scrolling */
   animation: smoothHorizontalShift 14s linear infinite alternate; /* Background moves horizontally */
+  overflow-x: hidden;
 }
 
 /* Defines the horizontal movement of the background */
@@ -32,19 +33,24 @@ body {
 }
 
 /* Logo container styling: centers logo */
+
+header {
+  display: flex;
+  flex-direction: row;
+}
+
 #logo {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  margin: 30px;
 }
 
 /* Logo image styling: adjusts width and maintains aspect ratio */
 .logo {
-  width: 14%;
+  width: 7svw;
   max-width: 100%;
   height: auto;
+  margin: 1rem;
 }
 
 /* Header styling for the games container */
@@ -84,46 +90,42 @@ main {
   color: rgb(218, 218, 218);
 }
 
+#api-elements {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+iframe {
+  height: 43svh;
+  width: 40svw;
+  border-radius: 25px;
+}
+
 #twitch-element {
   display: flex;
   justify-content: center;
   flex-direction: row;
   height: 100%;
-  width: 50%;
+  width: 100%;
 
-  background-color: #6756b02d;
-
-  border-color: #6756b0;
-  border-width: 5px;
-  border-style: solid;
-  border-radius: 25px;
-
-  padding: 0.5rem;
-  margin: 0.5rem;
+  margin: 0.25rem;
 }
 
 #clips-element {
   display: flex;
   justify-content: center;
   height: 100%;
-  width: 50%;
+  width: 100%;
 
-  background-color: #6756b02d;
-
-  border-color: #6756b0;
-  border-width: 5px;
-  border-style: solid;
-  border-radius: 25px;
-
-  padding: 0.5rem;
-  margin: 0.5rem;
+  margin: 0.25rem;
 }
 
 #stats-element {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  width: 100%;
+  width: 98%;
 
   background-color: #6756b02d;
 
@@ -141,7 +143,7 @@ main {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  width: 100%;
+  width: 98%;
 
   background-color: #6756b02d;
 
@@ -151,27 +153,125 @@ main {
   border-radius: 25px;
 
   padding: 1rem;
+  padding-bottom: 5rem;
   margin: 0.5rem;
 }
 
 #comments-form-element {
   position: absolute;
-  bottom: 0;
+  bottom: 1rem;
+  left: 15%;
 }
 
 #comments {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+}
+
+input,
+textarea,
+.submit-button {
+  background-color: #b5a9eb;
+  color: gray;
+  border-radius: 1rem;
+  border: white outset 2px;
+  padding: 1rem;
+}
+
+#review-score {
+  padding: 0;
+  margin-top: 0.75rem;
+  -webkit-appearance: none;
+  width: 100%;
+  height: 25px;
+  background: #5437d4;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: 0.2s;
+  transition: opacity 0.2s;
+}
+
+.comments-div {
+  position: relative;
+  display: flex;
+  background-color: #6756b0;
+  font-size: 1.5rem;
+  width: 80%;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 2rem;
+  margin: 1rem 1rem 1rem 10%;
+  border-radius: 1rem 1rem 7rem 1rem;
+  border: white outset 2px;
+}
+
+/* ------- Buttons -------- */
+
+.like-button {
+  position: absolute;
+  left: 2rem;
+  bottom: 0.33rem;
+  background-color: #5437d4;
+  font-size: 1rem;
+  color: white;
+  border-color: white;
+  border-radius: 1rem;
+  padding-left: 5px;
+  padding-right: 10px;
+}
+
+.dislike-button {
+  position: absolute;
+  left: 6rem;
+  bottom: 0.33rem;
+  background-color: #5437d4;
+  font-size: 1rem;
+  color: white;
+  border-color: white;
+  border-radius: 1rem;
+  padding-left: 5px;
+  padding-right: 10px;
+}
+
+.delete-button {
+  position: absolute;
+  right: 0.33rem;
+  top: 0.33rem;
+  background-color: #5437d4;
+  font-size: 1rem;
+  color: white;
+  border-color: white;
+  border-radius: 1rem;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+/* ------ Stats Styling -------- */
+
+#titleStats {
+  text-decoration: underline;
+  font-weight: bold;
 }
 
 /* Responsive styling for mobile screens */
 @media (max-width: 767px) {
   .logo {
+    width: 20svw;
+    height: auto;
     max-width: 150px; /* Reduces logo size on smaller screens */
   }
 
   main {
     display: flex;
     flex-direction: column;
+  }
+
+  header {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #logo {
+    width: 100%;
   }
 }

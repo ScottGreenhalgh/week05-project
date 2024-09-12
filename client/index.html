@@ -5,7 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
     <script type="module" src="./app.js" defer></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <title>GameScout</title>
   </head>
   <body>
@@ -19,51 +25,55 @@
     <!-- End Header -->
     <!-- Main -->
     <main id="main" aria-live="polite" style="display: none">
-      <div id="twitch-element"></div>
-      <div id="clips-element"></div>
-      <div id="stats-element"></div>
-      <div id="comments-container">
-        <div id="comments-element"></div>
-        <div id="comments-form-element">
-          <form id="comments">
-            <input
-              type="text"
-              id="username-box"
-              class="input-box"
-              for="text-input"
-              name="username"
-              placeholder="Username"
-              required
-              aria-label="your display name"
-            />
-            <textarea
-              id="message-box"
-              class="input-box"
-              for="text-input"
-              name="message"
-              placeholder="Comment"
-              required
-              aria-label="your message text"
-            ></textarea>
-            <input
-              type="range"
-              min="1"
-              max="5"
-              value="3"
-              name="reviewscore"
-              class="review-slider"
-              id="review-score"
-              aria-label="select review score, one to five"
-            />
-            <button
-              type="submit"
-              class="submit-button"
-              name="commentdata"
-              aria-label="submit comment"
-            >
-              Submit
-            </button>
-          </form>
+      <div id="api-elements">
+        <div id="twitch-element"></div>
+        <div id="clips-element"></div>
+      </div>
+      <div id="info-pannel">
+        <div id="stats-element"></div>
+        <div id="comments-container">
+          <div id="comments-element"></div>
+          <div id="comments-form-element">
+            <form id="comments">
+              <input
+                type="text"
+                id="username-box"
+                class="input-box"
+                for="text-input"
+                name="username"
+                placeholder=" Username"
+                required
+                aria-label="your display name"
+              />
+              <input
+                id="message-box"
+                class="input-box"
+                for="text-input"
+                name="message"
+                placeholder=" Comment"
+                required
+                aria-label="your message text"
+              />
+              <input
+                type="range"
+                min="1"
+                max="5"
+                value="3"
+                name="reviewscore"
+                class="review-slider"
+                id="review-score"
+                aria-label="select review score, one to five"
+              />
+              <button
+                type="submit"
+                class="submit-button"
+                name="commentdata"
+                aria-label="submit comment"
+              >
+                Submit
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </main>
