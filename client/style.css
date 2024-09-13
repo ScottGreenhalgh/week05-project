@@ -241,7 +241,7 @@ iframe {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: start;
   align-items: start;
   gap: 1rem;
   margin-top: 1.3rem;
@@ -254,7 +254,7 @@ iframe {
   background-color: #8b7eceab;
   font-size: 1rem;
   font-family: "Lato", sans-serif;
-  width: 45%;
+  width: 48%;
 
   /* padding: 1rem; */
 
