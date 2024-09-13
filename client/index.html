@@ -66,9 +66,8 @@
         <div id="clips-element"></div>
       </div>
       <div id="info-pannel">
-        <div id="stats-element"></div>
-        <div id="comments-container">
-          <div id="comments-element"></div>
+        <div id="stats-element" class="panel"></div>
+        <div id="comments-container" class="panel">
           <div id="comments-form-element">
             <form id="comments">
               <input
@@ -90,11 +89,23 @@
                 required
                 aria-label="your message text"
               />
-              <div class="review-text-div">
-                <p class="review-text">1 - 5</p>
-                <p class="review-text-lower">Review Score</p>
+              <div class="star-rating" aria-label="select a star rating, one to five">
+                <input type="radio" id="star5" name="reviewscore" value="5" />
+                <label for="star5" title="5 stars">★</label>
+              
+                <input type="radio" id="star4" name="reviewscore" value="4" />
+                <label for="star4" title="4 stars">★</label>
+              
+                <input type="radio" id="star3" name="reviewscore" value="3" />
+                <label for="star3" title="3 stars">★</label>
+              
+                <input type="radio" id="star2" name="reviewscore" value="2" />
+                <label for="star2" title="2 stars">★</label>
+              
+                <input type="radio" id="star1" name="reviewscore" value="1" />
+                <label for="star1" title="1 star">★</label>
               </div>
-              <input
+              <!-- <input
                 type="range"
                 min="1"
                 max="5"
@@ -103,7 +114,7 @@
                 class="review-slider"
                 id="review-score"
                 aria-label="select review score, one to five"
-              />
+              /> -->
               <button
                 type="submit"
                 class="submit-button"
@@ -113,6 +124,9 @@
                 Submit
               </button>
             </form>
+          </div>
+          <div id="comments-element"></div>
+          
           </div>
         </div>
       </div>

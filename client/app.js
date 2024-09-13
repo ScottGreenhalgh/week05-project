@@ -19,6 +19,8 @@ async function getHandler(endpoint, container) {
     data.forEach(function (game) {
       //clickable game titles
       const img = document.createElement("img");
+      const imgContainer = document.createElement("div");
+      imgContainer.classList.add("img-container");
 
       img.src = game.thumbnail_image;
       img.alt = "image of" + game.name;
@@ -53,15 +55,24 @@ async function getHandler(endpoint, container) {
           publishersStats.id = "pubStats";
           genreStats.id = "genStats";
 
+          titleStats.classList.add("stats");
+          currentPlayers.classList.add("stats");
+          peakPlayers.classList.add("stats");
+          descriptionStats.classList.add("stats");
+          developersStats.classList.add("stats");
+          publishersStats.classList.add("stats");
+          // genreStats.classList.add("stats");
+
+
           titleStats.innerHTML = game.name;
           currentPlayers.innerHTML =
-            "Currently playing: " + numberWithCommas(game.concurrent_in_game);
+            "<span>Currently playing: </span>" + numberWithCommas(game.concurrent_in_game);
           peakPlayers.innerHTML =
-            "Peak today: " + numberWithCommas(game.peak_in_game);
-          descriptionStats.innerHTML = "Description: " + game.description;
-          developersStats.innerHTML = "Developer: " + game.developers;
-          publishersStats.innerHTML = "Publisher: " + game.publishers;
-          genreStats.innerHTML = "Genre: " + game.genre;
+            "<span>Peak today: </span>" + numberWithCommas(game.peak_in_game);
+          descriptionStats.innerHTML = /*"<span>Description: </span>" + */game.description;
+          developersStats.innerHTML = "<span>Developer: </span>" + game.developers;
+          publishersStats.innerHTML = "<span>Publisher: </span>" + game.publishers;
+          // genreStats.innerHTML = "<span>Genre: </span>" + game.genre;
 
           statsContainer.appendChild(titleStats);
           statsContainer.appendChild(currentPlayers);
@@ -69,7 +80,7 @@ async function getHandler(endpoint, container) {
           statsContainer.appendChild(descriptionStats);
           statsContainer.appendChild(developersStats);
           statsContainer.appendChild(publishersStats);
-          statsContainer.appendChild(genreStats);
+          // statsContainer.appendChild(genreStats);
 
           const data = { twitch_id: game.twitch_id };
           console.log(data);
@@ -202,7 +213,6 @@ async function getHandler(endpoint, container) {
               "clip-button",
               "prev-button"
             );
-            // prevClipButton.innerText = "Prev Clip";
             const faPrevClip = document.createElement("i");
             faPrevClip.classList.add("fa-solid", "fa-chevron-left");
             prevClipButton.appendChild(faPrevClip);
@@ -214,7 +224,6 @@ async function getHandler(endpoint, container) {
             clipsContainer.appendChild(prevClipButton);
 
             const nextClipButton = document.createElement("a");
-            // nextClipButton.innerText = "Next Clip";
             nextClipButton.classList.add(
               "nav-button",
               "clip-button",
@@ -235,7 +244,8 @@ async function getHandler(endpoint, container) {
         getHandler("comments", commentContainer);
       });
 
-      container.appendChild(img);
+      container.appendChild(imgContainer);
+      imgContainer.appendChild(img);
     });
   }
   if (endpoint === "comments") {
@@ -259,7 +269,7 @@ async function getHandler(endpoint, container) {
         p.textContent = `"${dbData.message}" - ${dbData.username}`;
         p.className = "comments-text";
 
-        delButton.textContent = "Delete";
+        delButton.textContent = "🗑️";
         delButton.className = "delete-button";
         delButton.setAttribute("aria-label", "Delete button");
         delButton.id = dbData.id;
@@ -274,7 +284,7 @@ async function getHandler(endpoint, container) {
         dislikeButton.setAttribute("aria-label", "Disike button");
         dislikeButton.id = "dislike" + dbData.id;
 
-        reviewScoreText.textContent = "Review Score: " + dbData.reviewscore;
+        reviewScoreText.textContent = `${dbData.reviewscore}/5 ⭐`;
         reviewScoreText.className = "review-score";
         reviewScoreText.setAttribute("aria-label", "User review score");
         reviewScoreText.id = "review" + dbData.id;
@@ -396,6 +406,19 @@ commentContainer.addEventListener("click", async function (event) {
     }
     localStorage.setItem("dislikedEntries", JSON.stringify(dislikedEntries));
     getHandler("comments", commentContainer);
+  }
+});
+
+// horizontal scroll for games thumbnails
+const gamesThumbnails = document.getElementById('games')
+gamesThumbnails.addEventListener('wheel', function(event) {
+  if (event.deltaY > 0) {
+    gamesThumbnails.scrollLeft += 100;
+    event.preventDefault();
+  }
+  else {
+    gamesThumbnails.scrollLeft -= 100;
+    event.preventDefault();
   }
 });
 
