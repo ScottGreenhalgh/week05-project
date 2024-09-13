@@ -257,7 +257,7 @@ export const getSteamTopGames = async(amount) => {
             // console.log(igdbInfo.name);
             // console.log(twitchInfo.id);
             // console.log("streams: ",twitchStreams.length);
-            if (twitchStreams.length < amount) {
+            if (twitchStreams.length < 5) {
                 filterList.push(game.appid);
                 continue;
             }
