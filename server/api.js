@@ -254,9 +254,9 @@ export const getSteamTopGames = async(amount) => {
 
             // filter out games that have less than 10 streams
             const twitchStreams = await getTwitchGameStreams(twitchInfo.id, amount);
-            console.log(igdbInfo.name);
-            console.log(twitchInfo.id);
-            console.log("streams: ",twitchStreams.length);
+            // console.log(igdbInfo.name);
+            // console.log(twitchInfo.id);
+            // console.log("streams: ",twitchStreams.length);
             if (twitchStreams.length < amount) {
                 filterList.push(game.appid);
                 continue;
@@ -264,8 +264,8 @@ export const getSteamTopGames = async(amount) => {
 
             // filter out games that have less than 10 clips
             const twitchClips = await getTwitchGameClips(twitchInfo.id, 5, 7);
-            console.log(igdbInfo.name);
-            console.log("clips: ",twitchClips.length);
+            // console.log(igdbInfo.name);
+            // console.log("clips: ",twitchClips.length);
             if (twitchClips.length < 5) {
                 filterList.push(game.appid);
                 continue;
@@ -403,9 +403,7 @@ export const getGameClips = async (twitchGameID) => {
     /// returns: array of objects containing clip metadata for the 10 most-viewed clips in the games category over the past 7 days.
     // we are mostly concerned with the embed_url key, which can be used to create a twitch player embed as detailed here: https://dev.twitch.tv/docs/embed/video-and-clips/ we will need to append our own &parent tag for our domain though (and also allow that domain in twitch api! - atm i have only allowed http://localhost:5500)
     const clips = await getTwitchGameClips(twitchGameID,10,7);
-    for (const clip of clips) {
-        console.log(clip);
-        clip.embed_source = clip.embed_url + `&parent=${clientDomain}`;
+    for (const clip of clips) {        clip.embed_source = clip.embed_url + `&parent=${clientDomain}`;
     }
     return clips;
 }

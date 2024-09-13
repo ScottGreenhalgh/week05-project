@@ -20,6 +20,9 @@ body {
   background-attachment: fixed; /* Background stays fixed when scrolling */
   animation: smoothHorizontalShift 14s linear infinite alternate; /* Background moves horizontally */
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100svh;
 }
 
 /* Defines the horizontal movement of the background */
@@ -37,6 +40,10 @@ body {
 header {
   display: flex;
   flex-direction: row;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-right: 1rem;
+  flex: 0 0 auto;
 }
 
 /* Logo container styling: centers logo */
@@ -44,6 +51,8 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 40svw;
+
 }
 
 /* Logo image styling: adjusts width and maintains aspect ratio */
@@ -51,56 +60,96 @@ header {
   width: 7svw;
   max-width: 100%;
   height: auto;
-  margin: 1rem;
 }
 
 /* Header styling for the games container */
 #games {
   display: flex;
-  overflow-x: auto;
+  justify-content:left;
   white-space: nowrap;
-  scroll-behavior: smooth;
-  scrollbar-width: thin;
-  scrollbar-track-color: transparent;
-  scrollbar-color: #6756b0;
-  margin: 20px;
+  /* border-radius: 40px 40px 0px 0px; */
+  height: 87px;
+  overflow-y: hidden;
+  overflow-x: auto;
 }
-
-#games::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-#games::-webkit-scrollbar {
-  border-radius: 2px;
-  height: 4px;
-}
-
-#games::-webkit-scrollbar-thumb {
-  background-color: transparent;
-}
-
 #games:hover {
   cursor: pointer;
+  overflow-x: auto;
 }
+
+.img-container {
+  position: relative;
+  overflow: hidden;
+  width: 231px;
+  height: 87px;
+  flex: 0 0 auto;
+}
+
+.img-container img {
+  transition: transform 0.6s ease-out;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  
+
+}
+.img-container img:hover {
+  transform: scale(1.08);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 5px;
+  border-radius: 10px;
+}  
+
+::-webkit-scrollbar-track {
+ background: rgb(77, 30, 109);;
+ border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+ background: rgba(155, 126, 207, 0.536);;
+ border-radius: 5px;
+ border: 3px solid transparent;
+}
+
+::-webkit-scrollbar-thumb:hover {
+ background: rgb(133, 119, 212);;
+}
+
+
 
 /* ----- Containers ----- */
 
 main {
+  flex: 1 1 auto;
   display: flex;
   flex-direction: row;
   color: rgb(218, 218, 218);
+  /* height: 80svh; */
+  gap: 1rem;
+  margin-bottom: 0.85rem;
 }
 
 #api-elements {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 0.5rem;
+  margin-left: 1rem;
+}
+
+#info-pannel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 iframe {
-  height: 43svh;
+  height: 100%;
   width: 40svw;
-  /* border-radius: 25px; */
+  border-radius: 25px;
   border: none;
   background-color: black;
 }
@@ -112,9 +161,9 @@ iframe {
   height: 100%;
   width: 100%;
   position: relative;
-  margin: 0.25rem;
   border-radius: 40px;
-  overflow: hidden;
+  filter: drop-shadow(0 0 3px #00000065)
+  /* overflow: hidden; */
 }
 
 #clips-element {
@@ -125,98 +174,108 @@ iframe {
   position: relative;
   margin: 0.25rem;
   border-radius: 40px;
-  overflow: hidden;
+  filter: drop-shadow(0 0 3px #00000065)
+  /* overflow: hidden; */
 }
 
 /* --------- Stats --------- */
 
-#stats-element {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  width: 98%;
-
-  font-size: 2rem;
-
-  background-color: #6756b02d;
-
-  border-color: #6756b0;
-  border-width: 5px;
+.panel {
+  background-color: #8878a557;
+  position: relative;
+  margin-right: 1rem;
+  overflow: auto;
+  border-color: #4732a59c;
+  border-width: 0px;
   border-style: solid;
   border-radius: 25px;
+  padding: 1.5rem;
+  padding-top: 1rem;
+}
 
-  padding: 1rem;
-  margin: 0.5rem;
+#stats-element {
+  flex: 0 0 auto;
 }
 
 #titleStats {
-  font-size: 2.5rem;
-
-  text-decoration: underline;
+  font-size: 1.5rem;
   font-family: "Roboto", sans-serif;
   font-weight: 700;
   font-style: normal;
-
   padding-bottom: 0.2rem;
+  color: #6acf97;
 }
 
-#playStats,
-#descStats,
-#pubStats {
-  color: #d6d0ec;
-
-  font-family: "Noto Serif", serif;
-  font-optical-sizing: auto;
-  font-style: normal;
-
-  padding-bottom: 0.2rem;
-}
-
-#peakStats,
-#devStats,
-#genStats {
-  font-family: "Lato", sans-serif;
+.stats {
+  font-family: "Noto", sans-serif;
   font-weight: 400;
   font-style: normal;
+  padding: 0.4rem;
+  font-size: 0.9rem;
 }
+.stats span {
+  font-weight: bold;
+  color: #65d7db;
+}
+
+#descStats span {
+  display: block;
+}
+#playStats {
+  float: left;
+  padding-right: 1rem;
+}
+#peakStats {
+}
+#descStats {
+  clear: left;
+}
+
+#devStats {
+  float: left;
+  padding-right: 1rem;
+}
+
 
 /* --------- Comments ---------- */
 
 #comments-container {
+  flex: 1 1 auto;
+  height: 1px;
+
+}
+
+#comments-element {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: start;
+  gap: 1rem;
+  margin-top: 1.3rem
+}
+
+.comments-div {
   position: relative;
   display: flex;
-  justify-content: center;
-  flex-direction: column;
-  width: 98%;
 
-  background-color: #6756b02d;
+  background-color: #8b7eceab;
+  font-size: 1rem;
+  font-family: "Lato", sans-serif;
+  width: 45%;
 
-  border-color: #6756b0;
-  border-width: 5px;
-  border-style: solid;
-  border-radius: 25px;
+  /* padding: 1rem; */
 
-  padding: 1rem;
-  padding-bottom: 5rem;
-  margin: 0.5rem;
+  /* display: inline-block; */
+  /* margin: 1rem 1rem 1rem 10%; */
+  border-radius: 1rem 1rem 7rem 1rem;
+  filter: drop-shadow(0 0 3px #00000063);
 }
 
-#comments-form-element {
-  position: absolute;
-  bottom: 1rem;
-  left: 11.5%;
-}
-
-.review-text {
-  position: absolute;
-  bottom: 2.5rem;
-  left: 72%;
-}
-
-.review-text-lower {
-  position: absolute;
-  bottom: -0.5rem;
-  left: 68%;
+#comments-form-element form {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 1rem;
 }
 
 #comments {
@@ -224,133 +283,167 @@ iframe {
   flex-direction: row;
 }
 
-input,
-.submit-button {
-  background-color: #b5a9eb;
-  color: gray;
+.comments-text {
+  padding: 2.5rem 1.5rem 3.5rem 1.5rem;
+}
+
+.review-score {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 6%;
+  font-size: 1.2rem;
+}
+
+
+input {
+  padding: 0.75rem 0.75rem;
+  color: #000;
   border-radius: 1rem;
-  border: white outset 2px;
-  padding: 1rem;
-  margin-right: 1rem;
+  background-color: #c5bee4;
+  border: white solid 0px;
+  filter: drop-shadow(0 0 3px #00000063);
+  width: 30%;
 }
-
 input:hover {
-  border: gold outset 2px;
+  filter: drop-shadow(0 0 5px #00000080);
+  /* border: gold outset 2px; */
+  /* filter: drop-shadow(0 0 2px gold) */
 }
-
+.submit-button {
+  width: 5rem;
+  background-color: #ad8d33;
+  border-radius: 25px;
+  border: white solid 0px;
+  font-weight: bold;
+  color: #FFF;
+  transition: transform 0.2s, filter 0.2s;
+  cursor: pointer;
+  filter: drop-shadow(0 0 3px #00000063);
+}
 .submit-button:active {
   background-color: #5437d4;
   color: white;
 }
-
-#review-score {
-  padding: 0;
-  margin-top: 0.75rem;
-  appearance: none;
-  -webkit-appearance: none;
-  width: 100%;
-  height: 25px;
-  background: #5437d4;
-  outline: none;
-  opacity: 0.7;
-  -webkit-transition: 0.2s;
-  transition: opacity 0.2s;
+.submit-button:hover {
+  /* filter: drop-shadow(0 0 3px gold) */
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 5px #00000080);
 }
 
-.comments-div {
-  position: relative;
+.star-rating {
   display: flex;
-  background-color: #6756b0;
-  font-size: 1.5rem;
-  width: 80%;
+  flex-direction: row-reverse;
   justify-content: flex-start;
-  align-items: center;
-  padding: 2rem;
-  margin: 1rem 1rem 1rem 10%;
-  border-radius: 1rem 1rem 7rem 1rem;
-  border: white outset 2px;
+  filter: drop-shadow(0 0 3px #00000063);
+}
+.star-rating input {
+  display: none;
+}
+.star-rating label {
+  font-size: 30px;
+  color: #ddd;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.star-rating input:checked ~ label {
+  color: gold;
+}
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+  color: gold;
+  filter: drop-shadow(0 0 5px #00000080);
 }
 
 /* ------- Comments Buttons -------- */
 
 .like-button {
   position: absolute;
-  left: 2rem;
+  left: 1.75rem;
   bottom: 0.33rem;
-  background-color: #5437d4;
+  background-color: #3cb673;
   font-size: 1rem;
   color: white;
-  border-color: white;
+  border: 0px outset white;
   border-radius: 1rem;
-  padding-left: 5px;
-  padding-right: 10px;
+  padding: 0.2rem 0.5em 0.2rem 0.5rem; 
+  filter: drop-shadow(0 0 3px #00000063);
 }
 
 .dislike-button {
   position: absolute;
-  left: 6rem;
+  left: 5.75rem;
   bottom: 0.33rem;
-  background-color: #5437d4;
+  background-color: #af2929;
   font-size: 1rem;
   color: white;
-  border-color: white;
+  border: 0px outset white;
   border-radius: 1rem;
-  padding-left: 5px;
-  padding-right: 10px;
+  padding: 0.2rem 0.5em 0.2rem 0.5rem; 
 }
 
 .delete-button {
   position: absolute;
   right: 0.33rem;
   top: 0.33rem;
-  background-color: #5437d4;
+  /* background-color: #5437d4; */
+  background: none;
   font-size: 1rem;
   color: white;
-  border-color: white;
+  border: 0px solid white;
   border-radius: 1rem;
   padding-left: 5px;
   padding-right: 5px;
 }
 
-.like-button:hover,
-.dislike-button:hover,
-.delete-button:hover,
-.submit-button:hover {
-  border: gold outset 2px;
+.like-button,
+.dislike-button,
+.delete-button {
   cursor: pointer;
+  transition: transform 0.2s;
+  filter: drop-shadow(0 0 3px #00000063);
+  margin-bottom: 0.5rem;
 }
-
-.review-score {
-  position: absolute;
-  top: 0.33rem;
-  right: 6rem;
-  font-size: 1.2rem;
+.like-button:hover,
+.dislike-button:hover{
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 5px #97851c9d);
+  /* border: 2px outset gold; */
+  
+}
+.delete-button:hover {
+  transform: scale(1.1) rotate(-120deg);
+  filter: drop-shadow(0 0 5px #00000080);
 }
 
 /* -------- Stream/Clip Nav --------- */
 
 .nav-button {
   position: absolute;
-  /* bottom: 1rem; */
   background-color: transparent; /* #5437d494; */
-  /* border-radius: 10px; */
   padding: 0.2rem 0.4rem;
-  height: 80%;
+  height: 60%;
+  top: 50%;
+  transform: translateY(-50%);
   cursor: pointer;
   font-size: 3rem;
+  z-index: 1;
+  pointer-events: auto;
 }
 .nav-button:hover {
   background-color: transparent; /* #5437d4b4; */
 }
 .nav-button:hover > i {
   color: #b9afe3;
-  transform: scale(1.2);
+  transform: scale(1.2) translateY(-40%);
 }
 
 .nav-button i {
   position: relative;
   top: 50%;
+  transform: translateY(-50%);
   color: #9f8def;
+  transition: transform 0.2s;
 }
 .prev-button {
   left: 0.25rem;
@@ -368,7 +461,7 @@ input:hover {
 }
 .disabled-button:hover > i {
   color: #9f8def;
-  transform: scale(1);
+  transform: scale(1) translateY(-50%);
 }
 
 /* ---------- Media ----------- */
@@ -380,15 +473,26 @@ input:hover {
     width: 40svw;
     height: auto;
     max-width: 150px; /* Reduces logo size on smaller screens */
+    padding-bottom: 1rem;
   }
 
   header {
     display: flex;
     flex-direction: column;
+    padding-left: 0rem;
+    padding-right: 0rem;
+  }
+
+  body {
+    height: auto;
   }
 
   #logo {
     width: 100%;
+  }
+
+  #games {
+    margin-top: 0;
   }
 
   /* ----- Mobile Containers ----- */
@@ -396,55 +500,41 @@ input:hover {
   main {
     display: flex;
     flex-direction: column;
+    margin-bottom: 1rem;
+  }
+  #api-elements {
+    margin-right: 1rem;
+  }
+
+  #info-pannel {
+    margin-left: 1rem;
   }
 
   iframe {
     height: 30svh;
     width: 95svw;
-  }
-
-  /* ------- Mobile Comments -------- */
-
-  #comments {
-    display: flex;
-    flex-direction: column;
-    width: 90svw;
+    z-index: -1;
   }
 
   #comments-container {
-    padding-bottom: 15rem;
+    /* flex: 0 0 auto; */
+    height: auto;
   }
 
-  #comments-form-element {
-    position: absolute;
-    bottom: 1rem;
-    left: 5%;
+  #comments {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
-
-  .review-text {
-    position: absolute;
-    bottom: 5.3rem;
-    left: 30%;
-  }
-
-  .review-text-lower {
-    position: absolute;
-    bottom: 5.3rem;
-    left: 60%;
-  }
-
-  input,
-  .submit-button {
-    background-color: #b5a9eb;
-    color: gray;
-    border-radius: 1rem;
-    border: white outset 2px;
-    padding: 1rem;
-    margin-top: 0.5rem;
-    margin-right: 0.5rem;
-  }
-
   #message-box {
-    margin-bottom: 1rem;
+    width: 90%;
+    text-align: center;
+  }
+  #username-box {
+    width: 50%;
+    text-align: center;
+  }
+  .submit-button {
+    height: 3rem;
   }
 }
